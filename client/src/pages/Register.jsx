@@ -11,7 +11,7 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  axios.defaults.withCredentials = true;
+  // axios.defaults.withCredentials = true;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,7 +19,7 @@ export default function Register() {
     try {
       await axios.post(
         API,
-        { withCredentials: true },
+        // { withCredentials: true },
         { name, email, password }
       );
       navigate("/login");
