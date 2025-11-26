@@ -12,7 +12,7 @@ export default function Login() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const { login } = useContext(AuthContext); // <-- useContext
-  axios.defaults.withCredentials = true;
+  // axios.defaults.withCredentials = true;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,7 +20,7 @@ export default function Login() {
     try {
       const res = await axios.post(
         API,
-        { withCredentials: true },
+        // { withCredentials: true },
         { email, password }
       );
       login(res.data.token); // <-- use context login
