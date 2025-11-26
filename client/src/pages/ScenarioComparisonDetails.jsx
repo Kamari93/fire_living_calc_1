@@ -80,8 +80,10 @@ export default function ScenarioComparisonDetails() {
       try {
         const res = await axios.get(
           `https://firelivingcalc1server.vercel.app/api/scenario-comparisons/${id}`,
-          { withCredentials: true },
-          { headers: { Authorization: `Bearer ${token}` } }
+          {
+            withCredentials: true,
+            headers: { Authorization: `Bearer ${token}` },
+          }
         );
         setComparison(res.data);
       } catch (err) {
@@ -123,9 +125,11 @@ export default function ScenarioComparisonDetails() {
               const token = localStorage.getItem("token");
               const res = await axios.put(
                 `https://firelivingcalc1server.vercel.app/api/scenario-comparisons/${comparison._id}`,
-                { withCredentials: true },
                 { title: editTitle, notes: editNotes },
-                { headers: { Authorization: `Bearer ${token}` } }
+                {
+                  withCredentials: true,
+                  headers: { Authorization: `Bearer ${token}` },
+                }
               );
               setComparison(res.data);
               setEditing(false);

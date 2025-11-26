@@ -37,8 +37,8 @@ export default function ScenarioComparison() {
         const token = localStorage.getItem("token");
         const res = await axios.get(
           "https://firelivingcalc1server.vercel.app/api/scenarios",
-          { withCredentials: true },
           {
+            withCredentials: true,
             headers: { Authorization: `Bearer ${token}` },
           }
         );
@@ -59,8 +59,8 @@ export default function ScenarioComparison() {
       const token = localStorage.getItem("token");
       const res = await axios.get(
         "https://firelivingcalc1server.vercel.app/api/scenario-comparisons",
-        { withCredentials: true },
         {
+          withCredentials: true,
           headers: { Authorization: `Bearer ${token}` },
         }
       );
@@ -96,13 +96,15 @@ export default function ScenarioComparison() {
       const token = localStorage.getItem("token");
       const res = await axios.post(
         "https://firelivingcalc1server.vercel.app/api/scenario-comparisons",
-        { withCredentials: true },
         {
           scenarioIds: selectedIds.map(String),
           title: comparisonTitle,
           notes: comparisonNotes,
         },
-        { headers: { Authorization: `Bearer ${token}` } }
+        {
+          withCredentials: true,
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
       setComparison(res.data); // Show immediate feedback
       setSaveSuccess("Comparison saved!");
@@ -168,8 +170,10 @@ export default function ScenarioComparison() {
                         const token = localStorage.getItem("token");
                         await axios.delete(
                           `https://firelivingcalc1server.vercel.app/api/scenario-comparisons/${comp._id}`,
-                          { withCredentials: true },
-                          { headers: { Authorization: `Bearer ${token}` } }
+                          {
+                            withCredentials: true,
+                            headers: { Authorization: `Bearer ${token}` },
+                          }
                         );
                         await fetchSavedComparisons();
                       }

@@ -40,8 +40,8 @@ export default function ViewScenario() {
       try {
         const res = await axios.get(
           `https://firelivingcalc1server.vercel.app/api/scenarios/${id}`,
-          { withCredentials: true },
           {
+            withCredentials: true,
             headers: { Authorization: `Bearer ${token}` },
           }
         );

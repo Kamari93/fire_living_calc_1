@@ -520,17 +520,21 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
         await axios.put(
           // `http://localhost:5000/api/scenarios/${scenario._id}`,
           `https://firelivingcalc1server.vercel.app/api/scenarios/${scenario._id}`,
-          { withCredentials: true },
           cleaned,
-          { headers: { Authorization: `Bearer ${token}` } }
+          {
+            withCredentials: true,
+            headers: { Authorization: `Bearer ${token}` },
+          }
         );
       } else {
         await axios.post(
           // "http://localhost:5000/api/scenarios",
           "https://firelivingcalc1server.vercel.app/api/scenarios",
-          { withCredentials: true },
           cleaned,
-          { headers: { Authorization: `Bearer ${token}` } }
+          {
+            withCredentials: true,
+            headers: { Authorization: `Bearer ${token}` },
+          }
         );
       }
       onScenarioSaved();
