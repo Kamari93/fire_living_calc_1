@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 
-const API = "http://localhost:5000/api/auth/register";
+// const API = "http://localhost:5000/api/auth/register";
+const API = "https://firelivingcalc1server.vercel.app/api/auth/register";
 
 export default function Register() {
   const [name, setName] = useState("");

@@ -107,6 +107,8 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
     },
   });
 
+  axios.defaults.withCredentials = true;
+
   const [totals, setTotals] = useState({
     expenses: 0,
     assets: 0,
@@ -516,14 +518,20 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
     try {
       if (scenario && scenario._id) {
         await axios.put(
-          `http://localhost:5000/api/scenarios/${scenario._id}`,
+          // `http://localhost:5000/api/scenarios/${scenario._id}`,
+          `https://firelivingcalc1server.vercel.app/api/scenarios/${scenario._id}`,
+          { withCredentials: true },
           cleaned,
           { headers: { Authorization: `Bearer ${token}` } }
         );
       } else {
-        await axios.post("http://localhost:5000/api/scenarios", cleaned, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        await axios.post(
+          // "http://localhost:5000/api/scenarios",
+          "https://firelivingcalc1server.vercel.app/api/scenarios",
+          { withCredentials: true },
+          cleaned,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
       }
       onScenarioSaved();
       // Reset form after save

@@ -1,6 +1,9 @@
 // filepath: client/src/services/auth.js
 import axios from "axios";
-const API = "http://localhost:5000/api/auth";
+// const API = "http://localhost:5000/api/auth";
+const API = "https://firelivingcalc1server.vercel.app/api/auth";
+
+axios.defaults.withCredentials = true;
 
 export const register = (email, password) =>
   axios.post(`${API}/register`, { email, password });

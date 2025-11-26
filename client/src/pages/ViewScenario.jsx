@@ -32,13 +32,15 @@ export default function ViewScenario() {
   const location = useLocation();
   const fromComparison = location.state?.from === "comparison";
   const comparisonId = location.state?.comparisonId;
+  axios.defaults.withCredentials = true;
 
   useEffect(() => {
     const fetchScenario = async () => {
       const token = localStorage.getItem("token");
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/scenarios/${id}`,
+          `https://firelivingcalc1server.vercel.app/api/scenarios/${id}`,
+          { withCredentials: true },
           {
             headers: { Authorization: `Bearer ${token}` },
           }

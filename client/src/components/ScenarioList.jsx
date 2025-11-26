@@ -23,6 +23,8 @@ const ScenarioList = forwardRef(function ScenarioList({ onEdit }, ref) {
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
 
+  axios.defaults.withCredentials = true;
+
   // Fetch scenarios
   useEffect(() => {
     fetchScenarios();
@@ -47,9 +49,13 @@ const ScenarioList = forwardRef(function ScenarioList({ onEdit }, ref) {
     setSuccess("");
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get("http://localhost:5000/api/scenarios", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.get(
+        "https://firelivingcalc1server.vercel.app/api/scenarios",
+        { withCredentials: true },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setScenarios(res.data); // Store scenarios in state
     } catch (err) {
       setError("Failed to load scenarios.");
@@ -147,9 +153,13 @@ const ScenarioList = forwardRef(function ScenarioList({ onEdit }, ref) {
     setSuccess("");
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:5000/api/scenarios/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.delete(
+        `https://firelivingcalc1server.vercel.app/api/scenarios/${id}`,
+        { withCredentials: true },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setScenarios((prev) => prev.filter((s) => s._id !== id));
       setSuccess("Scenario deleted.");
     } catch (err) {
@@ -169,7 +179,8 @@ const ScenarioList = forwardRef(function ScenarioList({ onEdit }, ref) {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        `http://localhost:5000/api/scenarios/${id}/duplicate`,
+        `https://firelivingcalc1server.vercel.app/api/scenarios/${id}/duplicate`,
+        { withCredentials: true },
         {},
         {
           headers: { Authorization: `Bearer ${token}` },

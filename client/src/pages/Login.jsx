@@ -3,7 +3,8 @@ import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import AuthContext from "../context/AuthContext"; // <-- default import
 
-const API = "http://localhost:5000/api/auth/login";
+// const API = "http://localhost:5000/api/auth/login";
+const API = "https://firelivingcalc1server.vercel.app/api/auth/login";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -11,6 +12,7 @@ export default function Login() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const { login } = useContext(AuthContext); // <-- useContext
+  axios.defaults.withCredentials = true;
 
   const handleSubmit = async (e) => {
     e.preventDefault();

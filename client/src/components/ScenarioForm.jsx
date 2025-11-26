@@ -15,6 +15,7 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
     inflation: 0.02, // Default values for assumptions
     withdrawalRate: 0.04, // Default values for assumptions
   });
+  axios.defaults.withCredentials = true;
 
   // Pre-fill form when editing
   useEffect(() => {
@@ -56,7 +57,9 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
       if (scenario && scenario._id) {
         // Edit existing scenario
         await axios.put(
-          `http://localhost:5000/api/scenario/${scenario._id}`,
+          // `http://localhost:5000/api/scenario/${scenario._id}`,
+          "https://firelivingcalc1server.vercel.app/api/scenario/${scenario._id}",
+          { withCredentials: true },
           {
             ...form,
             income: Number(form.income),
@@ -78,7 +81,9 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
       } else {
         // Create new scenario
         await axios.post(
-          "http://localhost:5000/api/scenario",
+          // "http://localhost:5000/api/scenario",
+          "https://firelivingcalc1server.vercel.app/api/scenario",
+          { withCredentials: true },
           {
             ...form,
             income: Number(form.income),

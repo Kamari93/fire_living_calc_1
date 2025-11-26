@@ -10,6 +10,7 @@ export default function ProfileSettings() {
   const [newPassword, setNewPassword] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
+  axios.defaults.withCredentials = true;
 
   useEffect(() => {
     const fetchUser = async () => {

@@ -72,13 +72,15 @@ export default function ScenarioComparisonDetails() {
   const [editNotes, setEditNotes] = useState("");
   const [selectedChart, setSelectedChart] = useState(chartOptions[0].key);
   const navigate = useNavigate();
+  axios.defaults.withCredentials = true;
 
   useEffect(() => {
     const fetchComparison = async () => {
       const token = localStorage.getItem("token");
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/scenario-comparisons/${id}`,
+          `https://firelivingcalc1server.vercel.app/api/scenario-comparisons/${id}`,
+          { withCredentials: true },
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setComparison(res.data);
@@ -120,7 +122,8 @@ export default function ScenarioComparisonDetails() {
             onClick={async () => {
               const token = localStorage.getItem("token");
               const res = await axios.put(
-                `http://localhost:5000/api/scenario-comparisons/${comparison._id}`,
+                `https://firelivingcalc1server.vercel.app/api/scenario-comparisons/${comparison._id}`,
+                { withCredentials: true },
                 { title: editTitle, notes: editNotes },
                 { headers: { Authorization: `Bearer ${token}` } }
               );

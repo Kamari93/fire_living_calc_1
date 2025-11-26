@@ -14,6 +14,7 @@ export default function ScenarioComparison() {
   const [filterText, setFilterText] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  axios.defaults.withCredentials = true;
 
   // Sort and filter comparisons
   const sortedComparisons = [...savedComparisons].sort(
@@ -34,9 +35,13 @@ export default function ScenarioComparison() {
       setLoading(true);
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:5000/api/scenarios", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await axios.get(
+          "https://firelivingcalc1server.vercel.app/api/scenarios",
+          { withCredentials: true },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         setScenarios(res.data);
       } catch (err) {
         setError("Failed to load scenarios.");
@@ -53,7 +58,8 @@ export default function ScenarioComparison() {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.get(
-        "http://localhost:5000/api/scenario-comparisons",
+        "https://firelivingcalc1server.vercel.app/api/scenario-comparisons",
+        { withCredentials: true },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -89,7 +95,8 @@ export default function ScenarioComparison() {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.post(
-        "http://localhost:5000/api/scenario-comparisons",
+        "https://firelivingcalc1server.vercel.app/api/scenario-comparisons",
+        { withCredentials: true },
         {
           scenarioIds: selectedIds.map(String),
           title: comparisonTitle,
@@ -160,7 +167,8 @@ export default function ScenarioComparison() {
                       if (window.confirm("Delete this comparison?")) {
                         const token = localStorage.getItem("token");
                         await axios.delete(
-                          `http://localhost:5000/api/scenario-comparisons/${comp._id}`,
+                          `https://firelivingcalc1server.vercel.app/api/scenario-comparisons/${comp._id}`,
+                          { withCredentials: true },
                           { headers: { Authorization: `Bearer ${token}` } }
                         );
                         await fetchSavedComparisons();
