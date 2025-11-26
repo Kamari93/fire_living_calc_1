@@ -18,7 +18,11 @@ export default function Login() {
     e.preventDefault();
     setError("");
     try {
-      const res = await axios.post(API, { email, password });
+      const res = await axios.post(
+        API,
+        { withCredentials: true },
+        { email, password }
+      );
       login(res.data.token); // <-- use context login
       // localStorage.setItem("token", res.data.token);
       navigate("/dashboard"); // Redirect to dashboard or home
