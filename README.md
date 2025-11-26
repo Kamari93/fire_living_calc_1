@@ -4,7 +4,7 @@ Lightweight MERN app to model income, expenses, net worth and estimate a FIRE (f
 
 Status: working MVP. AI integration (assistant/insights) — in progress.
 
----
+## Live App: [Cost of Living/FIRE Calc App](https://firelivingcalc1client.vercel.app/)
 
 ## Key features
 
