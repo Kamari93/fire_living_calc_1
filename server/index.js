@@ -6,7 +6,13 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 const app = express(); // Initialize Express app
-app.use(cors()); // Enable CORS for all routes to allow cross-origin requests
+app.use(
+  cors({
+    origin: "https://firelivingcalc1client.vercel.app/ ", // Allow requests from this origin
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+); // Enable CORS for all routes to allow cross-origin requests
 app.use(express.json()); // Parse JSON request bodies
 
 // Define routes for different API endpoints
