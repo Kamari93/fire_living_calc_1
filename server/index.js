@@ -8,7 +8,7 @@ require("dotenv").config();
 const app = express(); // Initialize Express app
 app.use(
   cors({
-    origin: "https://firelivingcalc1client.vercel.app/ ", // Allow requests from this origin
+    origin: "https://firelivingcalc1client.vercel.app ", // Allow requests from this origin
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
