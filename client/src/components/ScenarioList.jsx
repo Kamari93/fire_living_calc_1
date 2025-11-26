@@ -51,8 +51,9 @@ const ScenarioList = forwardRef(function ScenarioList({ onEdit }, ref) {
       const token = localStorage.getItem("token");
       const res = await axios.get(
         "https://firelivingcalc1server.vercel.app/api/scenarios",
-        { withCredentials: true },
+        // { withCredentials: true },
         {
+          withCredentials: true,
           headers: { Authorization: `Bearer ${token}` },
         }
       );
