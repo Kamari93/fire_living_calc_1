@@ -1,19 +1,45 @@
 const mongoose = require("mongoose");
 
+// const AIInteractionSchema = new mongoose.Schema({
+//   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+//   scenarioId: { type: mongoose.Schema.Types.ObjectId, ref: "Scenario" },
+//   query: String,
+//   aiResponse: String,
+//   functionCalls: [
+//     {
+//       name: String,
+//       parameters: Object,
+//     },
+//   ],
+//   timestamp: { type: Date, default: Date.now },
+// });
 const AIInteractionSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   scenarioId: { type: mongoose.Schema.Types.ObjectId, ref: "Scenario" },
-  query: String,
+  type: { type: String, default: "insights" }, // insights | budget | savings | compare | cityCompare
+  query: String, // short prompt summary / inputs
   aiResponse: String,
+  tokensUsed: {
+    input: { type: Number, default: 0 },
+    output: { type: Number, default: 0 },
+    total: { type: Number, default: 0 },
+  },
+  costUSD: { type: Number, default: 0 },
+  cached: { type: Boolean, default: false }, // true if served from cache
   functionCalls: [
     {
       name: String,
       parameters: Object,
     },
   ],
-  timestamp: { type: Date, default: Date.now },
+  createdAt: { type: Date, default: Date.now },
 });
 
+// TTL: auto-delete interactions after 90 days to limit storage
+AIInteractionSchema.index(
+  { createdAt: 1 },
+  { expireAfterSeconds: 90 * 24 * 60 * 60 }
+);
 module.exports = mongoose.model("AIInteraction", AIInteractionSchema);
 // This model defines the structure of AI interactions in MongoDB.
 // It includes fields for user ID, scenario ID, query, AI response, function calls,
