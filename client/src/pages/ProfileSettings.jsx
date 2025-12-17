@@ -16,16 +16,17 @@ export default function ProfileSettings() {
     const fetchUser = async () => {
       const token = localStorage.getItem("token");
       const res = await axios.get(
-        "/api/user/me",
+        // "/api/user/me",
         // {
         //   headers: { Authorization: `Bearer ${token}` },
         // }
+        "https://firelivingcalc1server.vercel.app/api/user/me",
         {
           withCredentials: true,
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      console.log(res.data);
+
       setUser(res.data);
       setName(res.data.name || "");
       setDefaultInvestmentReturn(res.data.defaultInvestmentReturn || 0.07);
@@ -38,9 +39,11 @@ export default function ProfileSettings() {
     const token = localStorage.getItem("token");
     try {
       const res = await axios.put(
-        "/api/user/me",
-        { name, defaultInvestmentReturn },
+        // "/api/user/me",
+        // { name, defaultInvestmentReturn },
         // { headers: { Authorization: `Bearer ${token}` } }
+        "https://firelivingcalc1server.vercel.app/api/user/me",
+        { name, defaultInvestmentReturn },
         {
           withCredentials: true,
           headers: { Authorization: `Bearer ${token}` },
@@ -58,9 +61,11 @@ export default function ProfileSettings() {
     const token = localStorage.getItem("token");
     try {
       await axios.put(
-        "/api/user/me/password",
-        { oldPassword, newPassword },
+        // "/api/user/me/password",
+        // { oldPassword, newPassword },
         // { headers: { Authorization: `Bearer ${token}` } }
+        "https://firelivingcalc1server.vercel.app/api/user/me/password",
+        { oldPassword, newPassword },
         {
           withCredentials: true,
           headers: { Authorization: `Bearer ${token}` },
