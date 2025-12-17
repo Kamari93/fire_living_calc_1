@@ -10,20 +10,20 @@ export default function ProfileSettings() {
   const [newPassword, setNewPassword] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
-  axios.defaults.withCredentials = true;
+  // axios.defaults.withCredentials = true;
 
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem("token");
       const res = await axios.get(
         "/api/user/me",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
         // {
-        //   withCredentials: true,
         //   headers: { Authorization: `Bearer ${token}` },
         // }
+        {
+          withCredentials: true,
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
       setUser(res.data);
       setName(res.data.name || "");
@@ -39,7 +39,11 @@ export default function ProfileSettings() {
       const res = await axios.put(
         "/api/user/me",
         { name, defaultInvestmentReturn },
-        { headers: { Authorization: `Bearer ${token}` } }
+        // { headers: { Authorization: `Bearer ${token}` } }
+        {
+          withCredentials: true,
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
       setMessage("Profile updated!");
       setUser(res.data);
@@ -55,7 +59,11 @@ export default function ProfileSettings() {
       await axios.put(
         "/api/user/me/password",
         { oldPassword, newPassword },
-        { headers: { Authorization: `Bearer ${token}` } }
+        // { headers: { Authorization: `Bearer ${token}` } }
+        {
+          withCredentials: true,
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
       setMessage("Password changed!");
       setOldPassword("");
