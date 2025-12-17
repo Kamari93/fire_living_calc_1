@@ -15,9 +15,12 @@ export default function ProfileSettings() {
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem("token");
-      const res = await axios.get("/api/user/me", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.get(
+        "https://firelivingcalc1server.vercel.app/api/user/me",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setUser(res.data);
       setName(res.data.name || "");
       setDefaultInvestmentReturn(res.data.defaultInvestmentReturn || 0.07);
