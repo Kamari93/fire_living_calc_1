@@ -25,6 +25,7 @@ export default function ProfileSettings() {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
+      console.log(res.data);
       setUser(res.data);
       setName(res.data.name || "");
       setDefaultInvestmentReturn(res.data.defaultInvestmentReturn || 0.07);
