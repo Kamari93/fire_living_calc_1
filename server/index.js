@@ -15,7 +15,7 @@ app.use(
   })
 ); // Enable CORS for all routes to allow cross-origin requests
 
-app.options("*", cors()); // Enable pre-flight across-the-board
+// app.options("*", cors()); // Enable pre-flight across-the-board
 app.use(express.json()); // Parse JSON request bodies
 
 // Define routes for different API endpoints
