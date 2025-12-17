@@ -10,14 +10,18 @@ export default function ProfileSettings() {
   const [newPassword, setNewPassword] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
-  axios.defaults.withCredentials = true;
+  // axios.defaults.withCredentials = true;
 
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem("token");
       const res = await axios.get(
         "https://firelivingcalc1server.vercel.app/api/user/me",
+        // {
+        //   headers: { Authorization: `Bearer ${token}` },
+        // },
         {
+          withCredentials: true,
           headers: { Authorization: `Bearer ${token}` },
         }
       );
