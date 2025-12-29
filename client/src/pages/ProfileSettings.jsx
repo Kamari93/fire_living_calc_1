@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import AuthContext from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 // import axios from "axios";
 import api from "../api/axios";
 
 export default function ProfileSettings() {
-  const [user, setUser] = useState(null);
+  const { user, setUser } = useContext(AuthContext);
+  // const [user, setUser] = useState(null);
   const [name, setName] = useState("");
   const [defaultInvestmentReturn, setDefaultInvestmentReturn] = useState(0.07);
   const [oldPassword, setOldPassword] = useState("");

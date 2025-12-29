@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode"; // <-- FIXED IMPORT
+import api from "../api/axios";
 
 const AuthContext = createContext();
 
@@ -7,26 +8,53 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(() => localStorage.getItem("token"));
   const [user, setUser] = useState(null);
 
+  // useEffect(() => {
+  //   if (token) {
+  //     try {
+  //       const decoded = jwtDecode(token); // <-- FIXED USAGE
+  //       setUser(decoded);
+  //     } catch {
+  //       setUser(null);
+  //     }
+  //   } else {
+  //     setUser(null);
+  //   }
+  // }, [token]);
+
+  // Load user from API when token exists
   useEffect(() => {
-    if (token) {
-      try {
-        const decoded = jwtDecode(token); // <-- FIXED USAGE
-        setUser(decoded);
-      } catch {
+    const loadUser = async () => {
+      if (!token) {
         setUser(null);
+        return;
       }
-    } else {
-      setUser(null);
-    }
+
+      try {
+        const res = await api.get("/user/me");
+        setUser(res.data);
+      } catch {
+        logout();
+      }
+    };
+
+    loadUser();
   }, [token]);
 
-  const login = (newToken) => {
+  // const login = (newToken) => {
+  //   localStorage.setItem("token", newToken);
+  //   setToken(newToken);
+  //   const decoded = jwtDecode(newToken); // <-- FIXED USAGE
+  //   setUser(decoded.name);
+  //   console.log("User logged in:", decoded);
+  //   console.log("last login:", decoded.lastLogin);
+  // };
+
+  const login = async (newToken) => {
     localStorage.setItem("token", newToken);
     setToken(newToken);
-    const decoded = jwtDecode(newToken); // <-- FIXED USAGE
-    setUser(decoded.name);
-    console.log("User logged in:", decoded);
-    console.log("last login:", decoded.lastLogin);
+
+    const res = await api.get("/user/me");
+    setUser(res.data);
   };
 
   const logout = () => {
@@ -47,7 +75,7 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider
-      value={{ token, user, login, logout, isAuthenticated }}
+      value={{ token, user, setUser, login, logout, isAuthenticated }}
     >
       {children}
     </AuthContext.Provider>
