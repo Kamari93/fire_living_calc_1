@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
+import api from "../api/axios";
 
 export default function ProfileSettings() {
   const [user, setUser] = useState(null);
@@ -12,43 +13,72 @@ export default function ProfileSettings() {
   const navigate = useNavigate();
   // axios.defaults.withCredentials = true;
 
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     const token = localStorage.getItem("token");
+  //     const res = await axios.get(
+  //       // "/api/user/me",
+  //       // {
+  //       //   headers: { Authorization: `Bearer ${token}` },
+  //       // }
+  //       "https://firelivingcalc1server.vercel.app/api/user/me",
+  //       {
+  //         withCredentials: true,
+  //         headers: { Authorization: `Bearer ${token}` },
+  //       }
+  //     );
+
+  //     setUser(res.data);
+  //     setName(res.data.name || "");
+  //     setDefaultInvestmentReturn(res.data.defaultInvestmentReturn || 0.07);
+  //   };
+  //   fetchUser();
+  // }, []);
+
   useEffect(() => {
     const fetchUser = async () => {
-      const token = localStorage.getItem("token");
-      const res = await axios.get(
-        // "/api/user/me",
-        // {
-        //   headers: { Authorization: `Bearer ${token}` },
-        // }
-        "https://firelivingcalc1server.vercel.app/api/user/me",
-        {
-          withCredentials: true,
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-
-      setUser(res.data);
-      setName(res.data.name || "");
-      setDefaultInvestmentReturn(res.data.defaultInvestmentReturn || 0.07);
+      try {
+        const res = await api.get("/user/me");
+        setUser(res.data);
+        setName(res.data.name || "");
+        setDefaultInvestmentReturn(res.data.defaultInvestmentReturn || 0.07);
+      } catch (err) {
+        console.error("Failed to fetch user", err);
+      }
     };
+
     fetchUser();
   }, []);
 
+  // const handleProfileUpdate = async (e) => {
+  //   e.preventDefault();
+  //   const token = localStorage.getItem("token");
+  //   try {
+  //     const res = await axios.put(
+  //       // "/api/user/me",
+  //       // { name, defaultInvestmentReturn },
+  //       // { headers: { Authorization: `Bearer ${token}` } }
+  //       "https://firelivingcalc1server.vercel.app/api/user/me",
+  //       { name, defaultInvestmentReturn },
+  //       {
+  //         withCredentials: true,
+  //         headers: { Authorization: `Bearer ${token}` },
+  //       }
+  //     );
+  //     setMessage("Profile updated!");
+  //     setUser(res.data);
+  //   } catch {
+  //     setMessage("Error updating profile.");
+  //   }
+  // };
+
   const handleProfileUpdate = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem("token");
     try {
-      const res = await axios.put(
-        // "/api/user/me",
-        // { name, defaultInvestmentReturn },
-        // { headers: { Authorization: `Bearer ${token}` } }
-        "https://firelivingcalc1server.vercel.app/api/user/me",
-        { name, defaultInvestmentReturn },
-        {
-          withCredentials: true,
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const res = await api.put("/user/me", {
+        name,
+        defaultInvestmentReturn,
+      });
       setMessage("Profile updated!");
       setUser(res.data);
     } catch {
@@ -56,21 +86,36 @@ export default function ProfileSettings() {
     }
   };
 
+  // const handleChangePassword = async (e) => {
+  //   e.preventDefault();
+  //   const token = localStorage.getItem("token");
+  //   try {
+  //     await axios.put(
+  //       // "/api/user/me/password",
+  //       // { oldPassword, newPassword },
+  //       // { headers: { Authorization: `Bearer ${token}` } }
+  //       "https://firelivingcalc1server.vercel.app/api/user/me/password",
+  //       { oldPassword, newPassword },
+  //       {
+  //         withCredentials: true,
+  //         headers: { Authorization: `Bearer ${token}` },
+  //       }
+  //     );
+  //     setMessage("Password changed!");
+  //     setOldPassword("");
+  //     setNewPassword("");
+  //   } catch {
+  //     setMessage("Error changing password.");
+  //   }
+  // };
+
   const handleChangePassword = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem("token");
     try {
-      await axios.put(
-        // "/api/user/me/password",
-        // { oldPassword, newPassword },
-        // { headers: { Authorization: `Bearer ${token}` } }
-        "https://firelivingcalc1server.vercel.app/api/user/me/password",
-        { oldPassword, newPassword },
-        {
-          withCredentials: true,
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      await api.put("/user/me/password", {
+        oldPassword,
+        newPassword,
+      });
       setMessage("Password changed!");
       setOldPassword("");
       setNewPassword("");
