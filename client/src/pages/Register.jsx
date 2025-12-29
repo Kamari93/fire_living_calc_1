@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
+import api from "../api/axios";
 
 // const API = "http://localhost:5000/api/auth/register";
 const API = "https://firelivingcalc1server.vercel.app/api/auth/register";
@@ -13,19 +14,36 @@ export default function Register() {
   const navigate = useNavigate();
   // axios.defaults.withCredentials = true;
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setError("");
+  //   try {
+  //     await axios.post(
+  //       API,
+  //       // { withCredentials: true },
+  //       { name, email, password }
+  //     );
+  //     navigate("/login");
+  //   } catch (err) {
+  //     setError("Registration failed");
+  //     console.error(err);
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+
     try {
-      await axios.post(
-        API,
-        // { withCredentials: true },
-        { name, email, password }
-      );
+      await api.post("/auth/register", {
+        name,
+        email,
+        password,
+      });
       navigate("/login");
     } catch (err) {
-      setError("Registration failed");
-      console.error(err);
+      setError(err.response?.data?.message || "Registration failed");
+      console.error("Registration error:", err);
     }
   };
 

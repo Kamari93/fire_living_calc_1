@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
+import api from "../api/axios";
 import AuthContext from "../context/AuthContext"; // <-- default import
 
 // const API = "http://localhost:5000/api/auth/login";
@@ -14,18 +15,36 @@ export default function Login() {
   const { login } = useContext(AuthContext); // <-- useContext
   // axios.defaults.withCredentials = true;
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setError("");
+  //   try {
+  //     const res = await axios.post(
+  //       API,
+  //       // { withCredentials: true },
+  //       { email, password }
+  //     );
+  //     login(res.data.token); // <-- use context login
+  //     // localStorage.setItem("token", res.data.token);
+  //     navigate("/dashboard"); // Redirect to dashboard or home
+  //   } catch (err) {
+  //     setError("Invalid credentials");
+  //     console.error(err);
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+
     try {
-      const res = await axios.post(
-        API,
-        // { withCredentials: true },
-        { email, password }
-      );
-      login(res.data.token); // <-- use context login
-      // localStorage.setItem("token", res.data.token);
-      navigate("/dashboard"); // Redirect to dashboard or home
+      const res = await api.post("/auth/login", {
+        email,
+        password,
+      });
+
+      login(res.data.token);
+      navigate("/dashboard");
     } catch (err) {
       setError("Invalid credentials");
       console.error(err);
