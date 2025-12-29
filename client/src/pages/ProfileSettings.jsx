@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 // import axios from "axios";
-import api from "client/api/axios";
+import api from "../api/axios";
 
 export default function ProfileSettings() {
   const [user, setUser] = useState(null);
