@@ -50,6 +50,7 @@ export default function ProfileSettings() {
     };
 
     fetchUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // const handleProfileUpdate = async (e) => {
