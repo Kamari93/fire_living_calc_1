@@ -21,6 +21,11 @@ router.post("/login", async (req, res) => {
   if (!user || !(await bcrypt.compare(password, user.password))) {
     return res.status(401).json({ message: "Invalid credentials" });
   }
+
+  // ✅ persist lastLogin
+  user.lastLogin = new Date();
+  await user.save();
+
   const token = jwt.sign(
     { userId: user._id, name: user.name, lastLogin: new Date() },
     process.env.JWT_SECRET,
@@ -28,7 +33,15 @@ router.post("/login", async (req, res) => {
       expiresIn: "1d",
     }
   );
-  res.json({ token });
+  res.json({
+    token,
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      lastLogin: user.lastLogin,
+    },
+  });
 });
 
 module.exports = router;
