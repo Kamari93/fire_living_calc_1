@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 // import ReactTooltip from "react-tooltip";
 import { Tooltip as ReactTooltip } from "react-tooltip";
-import axios from "axios";
+// import axios from "axios";
+import api from "../api/axios";
 import InfoPopover from "./InfoPopover";
 import {
   sumExpenses,
@@ -107,7 +108,7 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
     },
   });
 
-  axios.defaults.withCredentials = true;
+  // axios.defaults.withCredentials = true;
 
   const [totals, setTotals] = useState({
     expenses: 0,
@@ -481,7 +482,7 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem("token");
+    // const token = localStorage.getItem("token");
     // Clean the form data before sending
     const cleaned = cleanFormData(form);
 
@@ -515,27 +516,34 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
     }
 
     console.log("Cleaned form data:", cleaned);
+    // try {
+    //   if (scenario && scenario._id) {
+    //     await axios.put(
+    //       // `http://localhost:5000/api/scenarios/${scenario._id}`,
+    //       `https://firelivingcalc1server.vercel.app/api/scenarios/${scenario._id}`,
+    //       cleaned,
+    //       {
+    //         withCredentials: true,
+    //         headers: { Authorization: `Bearer ${token}` },
+    //       }
+    //     );
+    //   } else {
+    //     await axios.post(
+    //       // "http://localhost:5000/api/scenarios",
+    //       "https://firelivingcalc1server.vercel.app/api/scenarios",
+    //       cleaned,
+    //       {
+    //         withCredentials: true,
+    //         headers: { Authorization: `Bearer ${token}` },
+    //       }
+    //     );
+    //   }
+
     try {
-      if (scenario && scenario._id) {
-        await axios.put(
-          // `http://localhost:5000/api/scenarios/${scenario._id}`,
-          `https://firelivingcalc1server.vercel.app/api/scenarios/${scenario._id}`,
-          cleaned,
-          {
-            withCredentials: true,
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+      if (scenario?._id) {
+        await api.put(`/scenarios/${scenario._id}`, cleaned);
       } else {
-        await axios.post(
-          // "http://localhost:5000/api/scenarios",
-          "https://firelivingcalc1server.vercel.app/api/scenarios",
-          cleaned,
-          {
-            withCredentials: true,
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        await api.post("/scenarios", cleaned);
       }
       onScenarioSaved();
       // Reset form after save
