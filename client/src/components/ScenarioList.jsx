@@ -10,7 +10,8 @@ import {
   formatNumberShortNoDecimals,
 } from "../services/financeHelpers";
 
-import axios from "axios";
+// import axios from "axios";
+import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
 
 // export default function ScenarioList({ onEdit }) {
@@ -23,7 +24,7 @@ const ScenarioList = forwardRef(function ScenarioList({ onEdit }, ref) {
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
 
-  axios.defaults.withCredentials = true;
+  // axios.defaults.withCredentials = true;
 
   // Fetch scenarios
   useEffect(() => {
@@ -47,20 +48,26 @@ const ScenarioList = forwardRef(function ScenarioList({ onEdit }, ref) {
     setLoading(true);
     setError("");
     setSuccess("");
+    // try {
+    //   const token = localStorage.getItem("token");
+    //   const res = await axios.get(
+    //     "https://firelivingcalc1server.vercel.app/api/scenarios",
+    //     {
+    //       withCredentials: true,
+    //       headers: { Authorization: `Bearer ${token}` },
+    //     }
+    //   );
+    //   setScenarios(res.data); // Store scenarios in state
+    // } catch (err) {
+    //   setError("Failed to load scenarios.");
+    //   console.error("Error fetching scenarios:", err);
+    //   // navigate("/login"); // Redirect to login on error
     try {
-      const token = localStorage.getItem("token");
-      const res = await axios.get(
-        "https://firelivingcalc1server.vercel.app/api/scenarios",
-        {
-          withCredentials: true,
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const res = await api.get("/scenarios");
       setScenarios(res.data); // Store scenarios in state
     } catch (err) {
       setError("Failed to load scenarios.");
       console.error("Error fetching scenarios:", err);
-      // navigate("/login"); // Redirect to login on error
     } finally {
       // finally block to ensure loading state is reset
       setLoading(false);
@@ -151,15 +158,22 @@ const ScenarioList = forwardRef(function ScenarioList({ onEdit }, ref) {
     setLoading(true);
     setError("");
     setSuccess("");
+    // try {
+    //   const token = localStorage.getItem("token");
+    //   await axios.delete(
+    //     `https://firelivingcalc1server.vercel.app/api/scenarios/${id}`,
+    //     {
+    //       withCredentials: true,
+    //       headers: { Authorization: `Bearer ${token}` },
+    //     }
+    //   );
+    //   setScenarios((prev) => prev.filter((s) => s._id !== id));
+    //   setSuccess("Scenario deleted.");
+    // } catch (err) {
+    //   setError("Failed to delete scenario.");
+    //   console.error("Error deleting scenario:", err);
     try {
-      const token = localStorage.getItem("token");
-      await axios.delete(
-        `https://firelivingcalc1server.vercel.app/api/scenarios/${id}`,
-        {
-          withCredentials: true,
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      await api.delete(`/scenarios/${id}`);
       setScenarios((prev) => prev.filter((s) => s._id !== id));
       setSuccess("Scenario deleted.");
     } catch (err) {
@@ -176,17 +190,27 @@ const ScenarioList = forwardRef(function ScenarioList({ onEdit }, ref) {
     setLoading(true);
     setError("");
     setSuccess("");
+    // try {
+    //   const token = localStorage.getItem("token");
+    //   await axios.post(
+    //     `https://firelivingcalc1server.vercel.app/api/scenarios/${id}/duplicate`,
+    //     {},
+    //     {
+    //       withCredentials: true,
+    //       headers: { Authorization: `Bearer ${token}` },
+    //     }
+    //   );
+    //   await fetchScenarios(); // Refresh list to show new copy
+    //   setSuccess("Scenario duplicated.");
+    // } catch (err) {
+    //   setError("Failed to duplicate scenario.");
+    //   console.error("Error duplicating scenario:", err);
+    // } finally {
+    //   setLoading(false);
+    // }
     try {
-      const token = localStorage.getItem("token");
-      await axios.post(
-        `https://firelivingcalc1server.vercel.app/api/scenarios/${id}/duplicate`,
-        {},
-        {
-          withCredentials: true,
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      await fetchScenarios(); // Refresh list to show new copy
+      await api.post(`/scenarios/${id}/duplicate`);
+      await fetchScenarios();
       setSuccess("Scenario duplicated.");
     } catch (err) {
       setError("Failed to duplicate scenario.");
