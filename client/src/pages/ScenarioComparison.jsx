@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+// import axios from "axios";
+import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
 
 export default function ScenarioComparison() {
@@ -14,7 +15,7 @@ export default function ScenarioComparison() {
   const [filterText, setFilterText] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  axios.defaults.withCredentials = true;
+  // axios.defaults.withCredentials = true;
 
   // Sort and filter comparisons
   const sortedComparisons = [...savedComparisons].sort(
@@ -33,15 +34,25 @@ export default function ScenarioComparison() {
   useEffect(() => {
     const fetchScenarios = async () => {
       setLoading(true);
+      // try {
+      //   // const token = localStorage.getItem("token");
+      //   // const res = await axios.get(
+      //   //   "https://firelivingcalc1server.vercel.app/api/scenarios",
+      //   //   {
+      //   //     withCredentials: true,
+      //   //     headers: { Authorization: `Bearer ${token}` },
+      //   //   }
+      //   // );
+      //   const res = await api.get("/scenarios");
+      //   setScenarios(res.data);
+      // } catch (err) {
+      //   setError("Failed to load scenarios.");
+      //   console.error("Error fetching scenarios:", err);
+      // } finally {
+      //   setLoading(false);
+      // }
       try {
-        const token = localStorage.getItem("token");
-        const res = await axios.get(
-          "https://firelivingcalc1server.vercel.app/api/scenarios",
-          {
-            withCredentials: true,
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const res = await api.get("/scenarios");
         setScenarios(res.data);
       } catch (err) {
         setError("Failed to load scenarios.");
@@ -55,15 +66,22 @@ export default function ScenarioComparison() {
 
   // Fetch saved comparisons
   const fetchSavedComparisons = async () => {
+    // try {
+    //   const token = localStorage.getItem("token");
+    //   const res = await axios.get(
+    //     "https://firelivingcalc1server.vercel.app/api/scenario-comparisons",
+    //     {
+    //       withCredentials: true,
+    //       headers: { Authorization: `Bearer ${token}` },
+    //     }
+    //   );
+    //   setSavedComparisons(res.data);
+    // } catch (err) {
+    //   setError("Failed to load saved comparisons.");
+    //   console.error("Error fetching saved comparisons:", err);
+    // }
     try {
-      const token = localStorage.getItem("token");
-      const res = await axios.get(
-        "https://firelivingcalc1server.vercel.app/api/scenario-comparisons",
-        {
-          withCredentials: true,
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const res = await api.get("/scenario-comparisons");
       setSavedComparisons(res.data);
     } catch (err) {
       setError("Failed to load saved comparisons.");
@@ -92,20 +110,38 @@ export default function ScenarioComparison() {
     setLoading(true);
     setError("");
     setSaveSuccess("");
+    // try {
+    //   const token = localStorage.getItem("token");
+    //   const res = await axios.post(
+    //     "https://firelivingcalc1server.vercel.app/api/scenario-comparisons",
+    //     {
+    //       scenarioIds: selectedIds.map(String),
+    //       title: comparisonTitle,
+    //       notes: comparisonNotes,
+    //     },
+    //     {
+    //       withCredentials: true,
+    //       headers: { Authorization: `Bearer ${token}` },
+    //     }
+    //   );
+    //   setComparison(res.data); // Show immediate feedback
+    //   setSaveSuccess("Comparison saved!");
+    //   setSelectedIds([]);
+    //   setComparisonTitle("");
+    //   setComparisonNotes("");
+    //   await fetchSavedComparisons(); // Refresh saved comparisons
+    // } catch (err) {
+    //   setError("Failed to create comparison.");
+    //   console.error("Error creating comparison:", err);
+    // } finally {
+    //   setLoading(false);
+    // }
     try {
-      const token = localStorage.getItem("token");
-      const res = await axios.post(
-        "https://firelivingcalc1server.vercel.app/api/scenario-comparisons",
-        {
-          scenarioIds: selectedIds.map(String),
-          title: comparisonTitle,
-          notes: comparisonNotes,
-        },
-        {
-          withCredentials: true,
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const res = await api.post("/scenario-comparisons", {
+        scenarioIds: selectedIds.map(String),
+        title: comparisonTitle,
+        notes: comparisonNotes,
+      });
       setComparison(res.data); // Show immediate feedback
       setSaveSuccess("Comparison saved!");
       setSelectedIds([]);
@@ -166,15 +202,19 @@ export default function ScenarioComparison() {
                   <button
                     className="bg-red-500 text-white px-3 py-1 rounded"
                     onClick={async () => {
+                      // if (window.confirm("Delete this comparison?")) {
+                      //   const token = localStorage.getItem("token");
+                      //   await axios.delete(
+                      //     `https://firelivingcalc1server.vercel.app/api/scenario-comparisons/${comp._id}`,
+                      //     {
+                      //       withCredentials: true,
+                      //       headers: { Authorization: `Bearer ${token}` },
+                      //     }
+                      //   );
+                      //   await fetchSavedComparisons();
+                      // }
                       if (window.confirm("Delete this comparison?")) {
-                        const token = localStorage.getItem("token");
-                        await axios.delete(
-                          `https://firelivingcalc1server.vercel.app/api/scenario-comparisons/${comp._id}`,
-                          {
-                            withCredentials: true,
-                            headers: { Authorization: `Bearer ${token}` },
-                          }
-                        );
+                        await api.delete(`/scenario-comparisons/${comp._id}`);
                         await fetchSavedComparisons();
                       }
                     }}
