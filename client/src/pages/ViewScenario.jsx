@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
+import api from "../api/axios";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import ScenarioCharts from "../components/ScenarioCharts";
 import {
@@ -32,19 +33,28 @@ export default function ViewScenario() {
   const location = useLocation();
   const fromComparison = location.state?.from === "comparison";
   const comparisonId = location.state?.comparisonId;
-  axios.defaults.withCredentials = true;
+  // axios.defaults.withCredentials = true;
 
   useEffect(() => {
     const fetchScenario = async () => {
-      const token = localStorage.getItem("token");
+      // const token = localStorage.getItem("token");
+      // try {
+      //   const res = await axios.get(
+      //     `https://firelivingcalc1server.vercel.app/api/scenarios/${id}`,
+      //     {
+      //       withCredentials: true,
+      //       headers: { Authorization: `Bearer ${token}` },
+      //     }
+      //   );
+      //   setScenario(res.data);
+      // } catch (err) {
+      //   // Optionally handle error
+      //   console.error("Error fetching scenario:", err);
+      // } finally {
+      //   setLoading(false);
+      // }
       try {
-        const res = await axios.get(
-          `https://firelivingcalc1server.vercel.app/api/scenarios/${id}`,
-          {
-            withCredentials: true,
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const res = await api.get(`/scenarios/${id}`);
         setScenario(res.data);
       } catch (err) {
         // Optionally handle error
