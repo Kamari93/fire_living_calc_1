@@ -225,6 +225,9 @@ export default function ScenarioComparisonDetails() {
                 <h3 className="text-md font-bold mb-2 text-center">
                   {snap.name}
                 </h3>
+                <h4 className="text-md font-bold mb-2 text-center">
+                  {snap.location?.city}, {snap.location?.state}
+                </h4>
                 <div className="flex justify-center items-center w-[400px] h-[400px] max-w-full ">
                   {chart.render(snap)}
                 </div>
