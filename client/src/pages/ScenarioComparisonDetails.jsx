@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
+import api from "../api/axios";
 import ExpensePieChart from "../components/ExpensePieChart";
 import IncomeVsExpensesPieChart from "../components/IncomeVsExpensesPieChart";
 import ComparisonTable from "../components/ComparisonTable";
@@ -72,19 +73,27 @@ export default function ScenarioComparisonDetails() {
   const [editNotes, setEditNotes] = useState("");
   const [selectedChart, setSelectedChart] = useState(chartOptions[0].key);
   const navigate = useNavigate();
-  axios.defaults.withCredentials = true;
+  // axios.defaults.withCredentials = true;
 
   useEffect(() => {
     const fetchComparison = async () => {
-      const token = localStorage.getItem("token");
+      // const token = localStorage.getItem("token");
+      // try {
+      //   const res = await axios.get(
+      //     `https://firelivingcalc1server.vercel.app/api/scenario-comparisons/${id}`,
+      //     {
+      //       withCredentials: true,
+      //       headers: { Authorization: `Bearer ${token}` },
+      //     }
+      //   );
+      //   setComparison(res.data);
+      // } catch (err) {
+      //   console.error(err);
+      // } finally {
+      //   setLoading(false);
+      // }
       try {
-        const res = await axios.get(
-          `https://firelivingcalc1server.vercel.app/api/scenario-comparisons/${id}`,
-          {
-            withCredentials: true,
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const res = await api.get(`scenario-comparisons/${id}`);
         setComparison(res.data);
       } catch (err) {
         console.error(err);
@@ -122,14 +131,18 @@ export default function ScenarioComparisonDetails() {
           <button
             className="bg-green-500 text-white px-3 py-1 rounded mr-2"
             onClick={async () => {
-              const token = localStorage.getItem("token");
-              const res = await axios.put(
-                `https://firelivingcalc1server.vercel.app/api/scenario-comparisons/${comparison._id}`,
-                { title: editTitle, notes: editNotes },
-                {
-                  withCredentials: true,
-                  headers: { Authorization: `Bearer ${token}` },
-                }
+              // const token = localStorage.getItem("token");
+              // const res = await axios.put(
+              //   `https://firelivingcalc1server.vercel.app/api/scenario-comparisons/${comparison._id}`,
+              //   { title: editTitle, notes: editNotes },
+              //   {
+              //     withCredentials: true,
+              //     headers: { Authorization: `Bearer ${token}` },
+              //   }
+              // );
+              const res = await api.put(
+                `scenario-comparisons/${comparison._id}`,
+                { title: editTitle, notes: editNotes }
               );
               setComparison(res.data);
               setEditing(false);
