@@ -15,8 +15,28 @@ const app = express(); // Initialize Express app
 //   })
 // ); // Enable CORS for all routes to allow cross-origin requests
 
+// const corsOptions = {
+//   origin: "https://firelivingcalc1client.vercel.app",
+//   credentials: true,
+//   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+//   allowedHeaders: ["Content-Type", "Authorization"],
+// };
+
+// create a list of allowed origins for local development and production
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://firelivingcalc1client.vercel.app",
+];
+
 const corsOptions = {
-  origin: "https://firelivingcalc1client.vercel.app",
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true); // Postman, curl
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
