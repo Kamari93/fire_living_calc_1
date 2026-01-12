@@ -7,6 +7,7 @@ require("dotenv").config();
 
 const app = express(); // Initialize Express app
 const vercelClientURL = "https://firelivingcalc1client.vercel.app";
+const localClientURL = "http://localhost:5173";
 
 // app.use(
 //   cors({
@@ -26,7 +27,7 @@ const vercelClientURL = "https://firelivingcalc1client.vercel.app";
 // create a list of allowed origins for local development and production
 const allowedOrigins = [
   // "http://localhost:5173",
-  process.env.CLIENT_URL,
+  localClientURL,
   vercelClientURL,
 ];
 
@@ -38,8 +39,8 @@ const corsOptions = {
     if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      // callback(new Error("Not allowed by CORS"));
-      callback(new Error(`CORS blocked: ${origin}`));
+      callback(new Error("Not allowed by CORS"));
+      // callback(new Error(`CORS blocked: ${origin}`));
     }
     // return callback(null, false);
   },
