@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 const app = express(); // Initialize Express app
+const vercelClientURL = "https://firelivingcalc1client.vercel.app";
 
 // app.use(
 //   cors({
@@ -26,7 +27,7 @@ const app = express(); // Initialize Express app
 // const allowedOrigins = [
 //   // "http://localhost:5173",
 //   process.env.CLIENT_URL,
-//   "https://firelivingcalc1client.vercel.app",
+//   vercelClientURL,
 // ];
 
 const allowedOrigins = [process.env.CLIENT_URL].filter(Boolean);
@@ -37,7 +38,7 @@ const corsOptions = {
     if (allowedOrigins.includes(origin)) {
       callback(null, true);
     }
-    // } else {
+    // else {
     //   // callback(new Error("Not allowed by CORS"));
     //   callback(new Error(`CORS blocked: ${origin}`));
     // }
@@ -49,6 +50,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
 app.use(express.json()); // Parse JSON request bodies
 
