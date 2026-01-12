@@ -65,7 +65,9 @@ app.use(
       }
 
       // ❗ IMPORTANT: do NOT throw an error on Vercel
-      return callback(null, false);
+      // return callback(null, false);
+      // Return error for disallowed origins
+      return callback(new Error("Not allowed by CORS"));
     },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
@@ -74,7 +76,7 @@ app.use(
 );
 
 // ✅ Explicitly handle OPTIONS
-app.options("*", cors());
+// app.options("*", cors());
 // app.options("*", cors(corsOptions));
 
 app.use(express.json()); // Parse JSON request bodies
