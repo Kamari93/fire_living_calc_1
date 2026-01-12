@@ -25,31 +25,56 @@ const localClientURL = "http://localhost:5173";
 // };
 
 // create a list of allowed origins for local development and production
-const allowedOrigins = [
-  // "http://localhost:5173",
-  localClientURL,
-  vercelClientURL,
-];
+// const allowedOrigins = [
+//   "http://localhost:5173",
+//   "https://firelivingcalc1client.vercel.app",
+// ];
 
 // const allowedOrigins = [process.env.CLIENT_URL].filter(Boolean);
 
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (!origin) return callback(null, true); // Postman, curl
-    if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-      // callback(new Error(`CORS blocked: ${origin}`));
-    }
-    // return callback(null, false);
-  },
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-};
+// const corsOptions = {
+//   origin: function (origin, callback) {
+//     if (!origin) return callback(null, true); // Postman, curl
+//     if (allowedOrigins.includes(origin)) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error("Not allowed by CORS"));
+//       // callback(new Error(`CORS blocked: ${origin}`));
+//     }
+//     // return callback(null, false);
+//   },
+//   credentials: true,
+//   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+//   allowedHeaders: ["Content-Type", "Authorization"],
+// };
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://firelivingcalc1client.vercel.app",
+];
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Allow non-browser requests (Postman, server-to-server)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      // ❗ IMPORTANT: do NOT throw an error on Vercel
+      return callback(null, false);
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
+// ✅ Explicitly handle OPTIONS
+app.options("*", cors());
 // app.options("*", cors(corsOptions));
 
 app.use(express.json()); // Parse JSON request bodies
