@@ -23,10 +23,13 @@ const app = express(); // Initialize Express app
 // };
 
 // create a list of allowed origins for local development and production
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://firelivingcalc1client.vercel.app",
-];
+// const allowedOrigins = [
+//   // "http://localhost:5173",
+//   process.env.CLIENT_URL,
+//   "https://firelivingcalc1client.vercel.app",
+// ];
+
+const allowedOrigins = [process.env.CLIENT_URL];
 
 const corsOptions = {
   origin: function (origin, callback) {
@@ -34,7 +37,8 @@ const corsOptions = {
     if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error("Not allowed by CORS"));
+      // callback(new Error("Not allowed by CORS"));
+      callback(new Error(`CORS blocked: ${origin}`));
     }
   },
   credentials: true,
@@ -53,6 +57,7 @@ app.use("/api/scenario-comparisons", require("./routes/scenarioComparison"));
 app.use("/api/user", require("./routes/user"));
 
 app.use("/api/auth", require("./routes/auth"));
+app.use("/api/ai", require("./routes/ai"));
 
 mongoose.connect(process.env.MONGO_URI);
 
