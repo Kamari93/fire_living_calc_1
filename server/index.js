@@ -153,6 +153,9 @@ const allowedOrigins = [
   process.env.CLIENT_URL,
 ].filter(Boolean); // Remove undefined values
 
+console.log("🔍 Allowed Origins:", allowedOrigins);
+console.log("🔍 NODE_ENV:", process.env.NODE_ENV);
+
 /**
  * ✅ CORS configuration (Vercel-safe)
  */
