@@ -147,47 +147,38 @@ const app = express();
 /**
  * ✅ Explicit allowlist (local + prod)
  */
-// const allowedOrigins = [
-//   "http://localhost:5173",
-//   "https://firelivingcalc1client.vercel.app",
-//   // process.env.CLIENT_URL,
-// ].filter(Boolean); // Remove undefined values
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://firelivingcalc1client.vercel.app",
+  // process.env.CLIENT_URL,
+].filter(Boolean); // Remove undefined values
 
-// console.log("🔍 Allowed Origins:", allowedOrigins);
-// console.log("🔍 NODE_ENV:", process.env.NODE_ENV);
+console.log("🔍 Allowed Origins:", allowedOrigins);
+console.log("🔍 NODE_ENV:", process.env.NODE_ENV);
 
-// /**
-//  * ✅ CORS configuration (Vercel-safe)
-//  */
-// const corsOptions = {
-//   origin: function (origin, callback) {
-//     // Allow server-to-server tools (Postman, curl)
-//     if (!origin) return callback(null, true);
+/**
+ * ✅ CORS configuration (Vercel-safe)
+ */
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow server-to-server tools (Postman, curl)
+    if (!origin) return callback(null, true);
 
-//     if (allowedOrigins.includes(origin)) {
-//       return callback(null, origin);
-//     }
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, origin);
+    }
 
-//     return callback(new Error(`CORS blocked: ${origin}`));
-//   },
-//   credentials: true,
-//   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-//   allowedHeaders: ["Content-Type", "Authorization"],
-// };
+    return callback(new Error(`CORS blocked: ${origin}`));
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
 
-// /**
-//  * ✅ Apply CORS BEFORE routes
-//  */
-// app.use(cors(corsOptions));
-
-app.use(
-  cors({
-    origin: true, // reflect origin
-    credentials: true,
-  })
-);
-
-// app.options("*", cors());
+/**
+ * ✅ Apply CORS BEFORE routes
+ */
+app.use(cors(corsOptions));
 
 /**
  * ✅ Explicitly handle preflight requests (IMPORTANT for Vercel)
