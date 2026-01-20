@@ -150,6 +150,7 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:5173",
   "https://firelivingcalc1client.vercel.app",
+  process.env.CLIENT_URL,
 ];
 
 /**
@@ -179,15 +180,26 @@ app.use(cors(corsOptions));
 /**
  * ✅ Explicitly handle preflight requests (IMPORTANT for Vercel)
  */
-if (process.env.NODE_ENV === "production") {
-  app.options("*", (req, res) => {
-    res.header("Access-Control-Allow-Origin", req.headers.origin);
-    res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE, OPTIONS");
-    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    res.header("Access-Control-Allow-Credentials", "true");
-    res.sendStatus(200);
-  });
-}
+// if (process.env.NODE_ENV === "production") {
+//   app.options("*", (req, res) => {
+//     res.header("Access-Control-Allow-Origin", req.headers.origin);
+//     res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE, OPTIONS");
+//     res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+//     res.header("Access-Control-Allow-Credentials", "true");
+//     res.sendStatus(200);
+//   });
+// }
+
+app.options("*", (req, res) => {
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.header("Access-Control-Allow-Origin", origin);
+  }
+  res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type,Authorization");
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.sendStatus(200);
+});
 // app.options("*", cors(corsOptions));
 
 /**
