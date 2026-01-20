@@ -167,7 +167,7 @@ const corsOptions = {
     return callback(new Error(`CORS blocked: ${origin}`));
   },
   credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
 };
 
@@ -182,7 +182,7 @@ app.use(cors(corsOptions));
 if (process.env.NODE_ENV === "production") {
   app.options("*", (req, res) => {
     res.header("Access-Control-Allow-Origin", req.headers.origin);
-    res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE");
+    res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE, OPTIONS");
     res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
     res.header("Access-Control-Allow-Credentials", "true");
     res.sendStatus(200);
