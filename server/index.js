@@ -179,7 +179,16 @@ app.use(cors(corsOptions));
 /**
  * ✅ Explicitly handle preflight requests (IMPORTANT for Vercel)
  */
-app.options("*", cors(corsOptions));
+if (process.env.NODE_ENV === "production") {
+  app.options("*", (req, res) => {
+    res.header("Access-Control-Allow-Origin", req.headers.origin);
+    res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.header("Access-Control-Allow-Credentials", "true");
+    res.sendStatus(200);
+  });
+}
+// app.options("*", cors(corsOptions));
 
 /**
  * ✅ Body parser
