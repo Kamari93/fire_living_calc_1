@@ -150,7 +150,7 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:5173",
   "https://firelivingcalc1client.vercel.app",
-  process.env.CLIENT_URL,
+  // process.env.CLIENT_URL,
 ].filter(Boolean); // Remove undefined values
 
 console.log("🔍 Allowed Origins:", allowedOrigins);
