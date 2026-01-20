@@ -202,7 +202,7 @@ app.use("/api/auth", require("./routes/auth"));
 app.use("/api/user", require("./routes/user"));
 app.use("/api/scenarios", require("./routes/scenario"));
 app.use("/api/scenario-comparisons", require("./routes/scenarioComparison"));
-app.use("/api/ai", require("./routes/ai"));
+// app.use("/api/ai", require("./routes/ai"));
 
 /**
  * ✅ Database
