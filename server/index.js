@@ -6,26 +6,7 @@ require("dotenv").config();
 
 const app = express();
 
-// ✅ CORS allowlist (local + prod)
-// const allowedOrigins = [
-//   "http://localhost:5173",
-//   "https://firelivingcalc1client.vercel.app",
-// ];
-
-// const corsOptions = {
-//   origin: function (origin, callback) {
-//     if (!origin) return callback(null, true); // Postman, curl
-//     if (allowedOrigins.includes(origin)) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error("Not allowed by CORS"));
-//     }
-//   },
-//   credentials: true,
-//   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-//   allowedHeaders: ["Content-Type", "Authorization"],
-// };
-
+// CORS setup
 const allowedOrigins = [process.env.CLIENT_URL];
 
 // CORS configuration with dynamic origin checking local + prod from .env
@@ -60,6 +41,6 @@ mongoose.connect(process.env.MONGO_URI);
 
 module.exports = app;
 // This file sets up the Express server with CORS configuration, connects to MongoDB, and includes API routes.
+// It exports the Express app for use in other parts of the application.
 
-// This file sets up the Express server with CORS configuration, connects to MongoDB, and includes API routes.
-// It includes a hard stop for preflight OPTIONS requests to ensure proper CORS handling.
+// filepath: server/index.js
