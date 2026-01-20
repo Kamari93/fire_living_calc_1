@@ -36,7 +36,7 @@ const Home = () => {
               </button>
               <button
                 className="bg-green-500 text-white px-6 py-2 rounded font-semibold hover:bg-green-600"
-                onClick={() => navigate("/signup")}
+                onClick={() => navigate("/register")}
               >
                 Sign Up
               </button>
