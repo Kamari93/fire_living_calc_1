@@ -11,7 +11,8 @@ import {
   computeNetWorth,
   computeAnnualSurplus,
   monthlyToAnnual,
-  estimateFIYear,
+  // estimateFIYear,
+  // resolveTargetNetWorth,
   // annualToMonthly,
 } from "../services/financeHelpers";
 
@@ -100,7 +101,7 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
     fireGoal: {
       targetNetWorth: "",
       estimatedFIYear: "",
-      realisticFIYear: "", // calculated
+      // realisticFIYear: "", // calculated
       // investmentReturnRate: "",
       investmentReturnRate: 0.07,
       // withdrawalRate: "",
@@ -174,16 +175,24 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
       : null;
     const computedTarget = exp ? Number(exp) / withdrawalRate : null;
     const targetNetWorth = providedTarget || computedTarget || null;
+    // const targetNetWorth = resolveTargetNetWorth(scenario);
 
     // --- 🔥 CALCULATE REALISTIC FI YEAR ---
-    const realisticFIYear = targetNetWorth
-      ? estimateFIYear({
-          netWorth: nw,
-          annualContribution: annualSurplus,
-          target: targetNetWorth,
-          annualReturn: Number(form.fireGoal?.investmentReturnRate ?? 0.07),
-        })
-      : null;
+    // const realisticFIYear = targetNetWorth
+    //   ? estimateFIYear({
+    //       netWorth: nw,
+    //       annualContribution: annualSurplus,
+    //       target: targetNetWorth,
+    //       annualReturn: Number(form.fireGoal?.investmentReturnRate ?? 0.07),
+    //     })
+    //   : null;
+
+    // --- 🔥 CALCULATE PREVIEW FI YEAR ---
+    const previewFIYear =
+      targetNetWorth && annualSurplus > 0
+        ? new Date().getFullYear() +
+          Math.ceil((targetNetWorth - nw) / Math.max(annualSurplus, 1))
+        : null;
 
     // ✅ 1. Store in totals (for UI display if needed)
     setTotals({
@@ -194,17 +203,28 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
       annualSurplus,
       comprehensive,
       targetNetWorth,
-      calculatedFIYear: realisticFIYear, // still stored here for backward UI use
+      previewFIYear,
     });
 
+    // setTotals({
+    //   expenses: exp,
+    //   assets: ast,
+    //   liabilities: liab,
+    //   netWorth: nw,
+    //   annualSurplus,
+    //   comprehensive,
+    //   targetNetWorth,
+    //   calculatedFIYear: realisticFIYear, // still stored here for backward UI use
+    // });
+
     // ✅ 2. ALSO store inside form.fireGoal for backend persistence
-    setForm((prev) => ({
-      ...prev,
-      fireGoal: {
-        ...prev.fireGoal,
-        realisticFIYear,
-      },
-    }));
+    // setForm((prev) => ({
+    //   ...prev,
+    //   fireGoal: {
+    //     ...prev.fireGoal,
+    //     realisticFIYear,
+    //   },
+    // }));
   }, [
     form.expenses,
     form.assets,
@@ -307,7 +327,7 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
         fireGoal: {
           targetNetWorth: "",
           estimatedFIYear: "",
-          realisticFIYear: "", // calculated
+          // realisticFIYear: "", // calculated
           // investmentReturnRate: "",
           // withdrawalRate: "",
           investmentReturnRate: 0.07,
@@ -489,9 +509,9 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
     // ensure fireGoal object exists
     cleaned.fireGoal = cleaned.fireGoal || {};
     // if user didn't manually set estimatedFIYear, persist computed estimate
-    if (!cleaned.fireGoal.estimatedFIYear && totals?.estimatedFIYear) {
-      cleaned.fireGoal.estimatedFIYear = totals.estimatedFIYear;
-    }
+    // if (!cleaned.fireGoal.estimatedFIYear && totals?.estimatedFIYear) {
+    //   cleaned.fireGoal.estimatedFIYear = totals.estimatedFIYear;
+    // }
     // also persist targetNetWorth if computed
     if (!cleaned.fireGoal.targetNetWorth && totals?.targetNetWorth) {
       cleaned.fireGoal.targetNetWorth = totals.targetNetWorth;
@@ -516,34 +536,16 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
     }
 
     console.log("Cleaned form data:", cleaned);
-    // try {
-    //   if (scenario && scenario._id) {
-    //     await axios.put(
-    //       // `http://localhost:5000/api/scenarios/${scenario._id}`,
-    //       `https://firelivingcalc1server.vercel.app/api/scenarios/${scenario._id}`,
-    //       cleaned,
-    //       {
-    //         withCredentials: true,
-    //         headers: { Authorization: `Bearer ${token}` },
-    //       }
-    //     );
-    //   } else {
-    //     await axios.post(
-    //       // "http://localhost:5000/api/scenarios",
-    //       "https://firelivingcalc1server.vercel.app/api/scenarios",
-    //       cleaned,
-    //       {
-    //         withCredentials: true,
-    //         headers: { Authorization: `Bearer ${token}` },
-    //       }
-    //     );
-    //   }
 
     try {
       if (scenario?._id) {
         await api.put(`/scenarios/${scenario._id}`, cleaned);
+        const refreshed = await api.get(`/scenarios/${scenario._id}`);
+        onScenarioSaved(refreshed.data);
       } else {
         await api.post("/scenarios", cleaned);
+        const created = await api.post("/scenarios", cleaned);
+        onScenarioSaved(created.data);
       }
       onScenarioSaved();
       // Reset form after save
@@ -589,7 +591,7 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
         fireGoal: {
           targetNetWorth: "",
           estimatedFIYear: "",
-          realisticFIYear: "", // calculated
+          // realisticFIYear: "", // calculated
           investmentReturnRate: 0.07,
           withdrawalRate: 0.04,
         },
@@ -656,18 +658,6 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
             placeholder="Scenario Title"
             className="w-full px-3 py-2 border rounded"
           />
-          {/* <div className="flex space-x-2">
-            <label htmlFor="location.city">
-              City
-              <span
-                data-tooltip-id="info"
-                data-tooltip-content="Where you live or plan to live."
-                className="ml-1 cursor-pointer text-blue-500"
-              >
-                ⓘ
-              </span>
-            </label>
-          </div> */}
           <label htmlFor="location.city">
             Location
             <span
@@ -774,16 +764,6 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
             min={0}
             className="w-1/4 px-3 py-2 border rounded"
           />
-          {/* <label htmlFor="income.taxes" className="flex items-center">
-            Taxes
-            <span
-              data-tooltip-id="info"
-              data-tooltip-content="Federal, state, and local taxes"
-              className="ml-1 cursor-pointer text-blue-500"
-            >
-              ⓘ
-            </span>
-          </label> */}
           <div className="grid gap-2">
             {/* Taxes: single total field (replace federal/state/local inputs) */}
             <label
@@ -820,24 +800,6 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
               type="text"
               className="w-full px-3 py-2 border rounded"
             />
-
-            {/* Computed take-home (read-only, formatted) */}
-            {/* <label className="mt-2">Take-home Pay (Gross - Total Taxes)</label>
-            <input
-              value={formatNumber(form.income.takeHome ?? "")}
-              readOnly
-              className="w-full px-3 py-2 border rounded bg-gray-50"
-            /> */}
-
-            {/* Net annual = take-home + additionalIncome */}
-            {/* <label className="mt-2">
-              Net Annual (Take-home + Additional Income)
-            </label>
-            <input
-              value={formatNumber(form.income.netAnnual ?? "")}
-              readOnly
-              className="w-full px-3 py-2 border rounded bg-gray-50"
-            /> */}
           </div>
           {errors.taxes && <span className="text-red-500">{errors.taxes}</span>}
 
@@ -1293,7 +1255,12 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
               </InfoPopover>
             </div>
             <div className="font-semibold text-blue-900">
-              <strong>{totals.calculatedFIYear ?? "N/A"}</strong>
+              {/* <strong>{totals.calculatedFIYear ?? "N/A"}</strong> */}
+              <strong>
+                {scenario?.fireGoal?.realisticFIYear ??
+                  totals.previewFIYear ??
+                  "—"}
+              </strong>
             </div>
           </div>
         </div>
@@ -1334,28 +1301,3 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
     </form>
   );
 }
-
-/*
-  --- BACKUP: Previous Simple Form & Model ---
-  // If you want to use the previous simple model, uncomment and use this instead:
-
-  // const [form, setForm] = useState({
-  //   name: "",
-  //   income: "",
-  //   expenses: "",
-  //   location: "",
-  //   fireGoal: "",
-  //   investmentReturn: 0.07,
-  //   inflation: 0.02,
-  //   withdrawalRate: 0.04,
-  // });
-
-  // <input name="name" ... />
-  // <input name="income" ... />
-  // <input name="expenses" ... />
-  // <input name="location" ... />
-  // <input name="fireGoal" ... />
-  // <input name="investmentReturn" ... />
-  // <input name="inflation" ... />
-  // <input name="withdrawalRate" ... />
-*/

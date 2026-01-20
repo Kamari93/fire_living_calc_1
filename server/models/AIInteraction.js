@@ -16,7 +16,8 @@ const mongoose = require("mongoose");
 const AIInteractionSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   scenarioId: { type: mongoose.Schema.Types.ObjectId, ref: "Scenario" },
-  type: { type: String, default: "insights" }, // insights | budget | savings | compare | cityCompare
+  // promptType: { type: String, default: "insights" }, // insights | budget | savings | compare | cityCompare
+  promptType: String, // "scenario_insight" | "scenario_comparison_insight"
   query: String, // short prompt summary / inputs
   aiResponse: String,
   tokensUsed: {
@@ -32,6 +33,10 @@ const AIInteractionSchema = new mongoose.Schema({
       parameters: Object,
     },
   ],
+  comparisonId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "ScenarioComparison",
+  },
   createdAt: { type: Date, default: Date.now },
 });
 

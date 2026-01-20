@@ -11,6 +11,7 @@ import NetWorthLineChart from "../components/NetWorthLineChart";
 import LiabilitiesPieChart from "../components/LiabilitiesPieChart";
 import IncomeVsLiabilitiesPieChart from "../components/IncomeVsLiabilitiesPieChart";
 import TaxBreakdownInfo from "../components/TaxBreakDownPopOver";
+import { buildNetWorthProjectionsFromScenario } from "../services/netWorthUtils";
 
 function formatNumber(value) {
   if (value === "" || value === undefined || value === null) return "";
@@ -58,9 +59,18 @@ const chartOptions = [
   {
     key: "netWorth",
     label: "Net Worth Over Time",
-    render: (snap) => (
-      <NetWorthLineChart netWorthHistory={snap.netWorthHistory || []} />
-    ),
+    render: (snap) => {
+      const { historical, estimated, realistic } =
+        buildNetWorthProjectionsFromScenario(snap);
+
+      return (
+        <NetWorthLineChart
+          historical={historical}
+          estimated={estimated}
+          realistic={realistic}
+        />
+      );
+    },
   },
 ];
 
@@ -72,6 +82,11 @@ export default function ScenarioComparisonDetails() {
   const [editTitle, setEditTitle] = useState("");
   const [editNotes, setEditNotes] = useState("");
   const [selectedChart, setSelectedChart] = useState(chartOptions[0].key);
+  //AI Insights state
+  const [aiInsights, setAiInsights] = useState(null);
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState(null);
+  //End of AI Insights state
   const navigate = useNavigate();
   // axios.defaults.withCredentials = true;
 
@@ -103,6 +118,25 @@ export default function ScenarioComparisonDetails() {
     };
     fetchComparison();
   }, [id]);
+
+  // Fetch AI Insights
+  const fetchAiInsights = async () => {
+    setAiLoading(true);
+    setAiError(null);
+
+    try {
+      const res = await api.post("/ai/comparison-insights", {
+        comparisonId: comparison._id,
+      });
+      // setAiInsights(res.data);
+      setAiInsights(res.data.content);
+    } catch (err) {
+      setAiError("Unable to generate insights", err);
+      console.error("AI Insights error:", err);
+    } finally {
+      setAiLoading(false);
+    }
+  };
 
   if (loading) return <div>Loading...</div>;
   if (!comparison) return <div>Comparison not found.</div>;
@@ -283,6 +317,26 @@ export default function ScenarioComparisonDetails() {
             );
           })}
         </div>
+      </div>
+      {/* AI Insights Section */}
+      <div className="bg-white rounded shadow p-4 my-4">
+        <h3 className="font-semibold mb-2">AI Financial Comparison Insights</h3>
+
+        {!aiInsights && (
+          <button
+            onClick={fetchAiInsights}
+            disabled={aiLoading}
+            className="bg-blue-600 text-white px-4 py-2 rounded"
+          >
+            {aiLoading ? "Analyzing..." : "Generate Insights"}
+          </button>
+        )}
+
+        {aiError && <p className="text-red-500 mt-2">{aiError}</p>}
+
+        {aiInsights && (
+          <div className="mt-4 text-sm whitespace-pre-line">{aiInsights}</div>
+        )}
       </div>
     </div>
   );

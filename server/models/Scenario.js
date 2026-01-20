@@ -74,6 +74,15 @@ const ScenarioSchema = new mongoose.Schema({
     investmentReturnRate: { type: Number, default: 0.07 },
     withdrawalRate: { type: Number, default: 0.04 },
   },
+  // NEW: store snapshots of net worth over time
+  netWorthHistory: [
+    {
+      year: Number,
+      netWorth: Number,
+      annualSurplus: Number,
+      recordedAt: { type: Date, default: Date.now },
+    },
+  ],
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });

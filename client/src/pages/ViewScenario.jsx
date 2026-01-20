@@ -29,6 +29,11 @@ export default function ViewScenario() {
   const [scenario, setScenario] = useState(null);
   const [loading, setLoading] = useState(true);
   const [step, setStep] = useState(0);
+  //AI Insights state
+  const [aiInsights, setAiInsights] = useState(null);
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState(null);
+  //End of AI Insights state
   const navigate = useNavigate();
   const location = useLocation();
   const fromComparison = location.state?.from === "comparison";
@@ -37,22 +42,6 @@ export default function ViewScenario() {
 
   useEffect(() => {
     const fetchScenario = async () => {
-      // const token = localStorage.getItem("token");
-      // try {
-      //   const res = await axios.get(
-      //     `https://firelivingcalc1server.vercel.app/api/scenarios/${id}`,
-      //     {
-      //       withCredentials: true,
-      //       headers: { Authorization: `Bearer ${token}` },
-      //     }
-      //   );
-      //   setScenario(res.data);
-      // } catch (err) {
-      //   // Optionally handle error
-      //   console.error("Error fetching scenario:", err);
-      // } finally {
-      //   setLoading(false);
-      // }
       try {
         const res = await api.get(`/scenarios/${id}`);
         setScenario(res.data);
@@ -134,17 +123,6 @@ export default function ViewScenario() {
           label: "Dependents",
           value: scenario.income?.dependents || "---",
         },
-        // {
-        //   label: "Total Taxes",
-        //   // value: `$${scenario.income?.totalTaxes}`,
-        //   // value: `$${formatNumber(scenario.income?.totalTaxes)}`,
-        //   value:
-        //     scenario.income?.totalTaxes != null
-        //       ? `$${formatNumber(scenario.income.totalTaxes)}`
-        //       : scenario.expenses?.taxes
-        //       ? "See tax breakdown below or enter total tax"
-        //       : "---",
-        // },
         {
           label: "Total Income Tax",
           // value: `$${scenario.income?.totalIncomeTax}`,
@@ -344,6 +322,25 @@ export default function ViewScenario() {
   ];
 
   const currentStep = steps[step];
+  // Fetch AI Insights
+  const fetchAiInsights = async () => {
+    setAiLoading(true);
+    setAiError(null);
+
+    try {
+      const res = await api.post("/ai/insights", {
+        scenarioId: scenario._id,
+      });
+      // setAiInsights(res.data);
+      setAiInsights(res.data.content);
+    } catch (err) {
+      setAiError("Unable to generate insights", err);
+      console.error("AI Insights error:", err);
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
   return (
     <div className="max-w-4xl mx-auto py-8 px-4">
       {/* Scenario Details Card */}
@@ -388,14 +385,6 @@ export default function ViewScenario() {
 
         {/* Render all fields in this category */}
         <div className="space-y-2">
-          {/* {currentStep.fields.map(
-            (field, idx) =>
-              field.value && (
-                <div key={idx}>
-                  <strong>{field.label}:</strong> {field.value}
-                </div>
-              )
-          )} */}
           <div className="space-y-4 h-[200px] overflow-y-auto p-4 pr-2 bg-gray-50 rounded-lg">
             {currentStep.fields.map(
               (field, idx) =>
@@ -455,37 +444,6 @@ export default function ViewScenario() {
           {fromComparison ? "Back to Comparison" : "Back to Dashboard"}
         </button>
       </div>
-
-      {/* Summary totals card (new) */}
-      {/* <div className="bg-white rounded shadow p-4 my-4">
-        <h3 className="font-semibold mb-2">Summary Totals</h3>
-        <div className="grid grid-cols-2 gap-4 text-sm">
-          <div>
-            Total Expenses: <strong>${formatNumber(expenseTotal)}</strong>
-          </div>
-          <div>
-            Net Annual Income:{" "}
-            <strong>
-              $
-              {formatNumber(
-                scenario.income?.netAnnual != null
-                  ? `${formatNumber(scenario.income.netAnnual)}`
-                  : "---"
-              )}
-            </strong>
-          </div>
-          <div>
-            Total Liabilities:{" "}
-            <strong>${formatNumber(liabilitiesTotal)}</strong>
-          </div>
-          <div>
-            Net Worth: <strong>${formatNumber(netWorth)}</strong>
-          </div>
-          <div>
-            Total Assets: <strong>${formatNumber(assetTotal)}</strong>
-          </div>
-        </div>
-      </div> */}
       {/* Summary totals card (new) */}
       <div className="bg-white rounded shadow p-4 my-4">
         <h3 className="font-semibold mb-2">Summary Totals</h3>
@@ -506,26 +464,8 @@ export default function ViewScenario() {
               ⓘ
             </button>
           </div>
-          {/* <div>
-            Net Annual Income:&nbsp;
-            <strong>
-              {scenario.income?.netAnnual != null
-                ? `$${formatNumber(scenario.income.netAnnual)}`
-                : "---"}
-            </strong>
-          </div> */}
           <div className="flex items-center">
             Net Annual Income:&nbsp;
-            {/* <button
-              type="button"
-              aria-label="Net Annual Income info"
-              data-tooltip-id="annualSurplusTip"
-              data-tooltip-content="Net Annual is your income after taxes (take home pay) + any additional income."
-              className=" text-xs text-blue-500"
-              place="right"
-            >
-              ⓘ
-            </button> */}
             <strong>
               {scenario.income?.netAnnual != null
                 ? `$${formatNumber(scenario.income.netAnnual)}`
@@ -636,6 +576,28 @@ export default function ViewScenario() {
         <ReactTooltip id="comprehensiveTip" place="right" />
         <ReactTooltip id="customNetTip" place="right" />
       </div>
+      {/* End of Summary Section */}
+
+      {/* AI Insights Section */}
+      <div className="bg-white rounded shadow p-4 my-4">
+        <h3 className="font-semibold mb-2">AI Financial Insights</h3>
+
+        {!aiInsights && (
+          <button
+            onClick={fetchAiInsights}
+            disabled={aiLoading}
+            className="bg-blue-600 text-white px-4 py-2 rounded"
+          >
+            {aiLoading ? "Analyzing..." : "Generate Insights"}
+          </button>
+        )}
+
+        {aiError && <p className="text-red-500 mt-2">{aiError}</p>}
+
+        {aiInsights && (
+          <div className="mt-4 text-sm whitespace-pre-line">{aiInsights}</div>
+        )}
+      </div>
 
       {/* Charts Section */}
       <div className="mt-8 bg-white rounded shadow p-6">
@@ -646,38 +608,4 @@ export default function ViewScenario() {
       </div>
     </div>
   );
-
-  //   return (
-  //     <div className="max-w-4xl mx-auto py-8 px-4">
-  //       <div className="bg-white rounded shadow p-6">
-  //         <h1 className="text-2xl font-bold mb-4 text-blue-700">
-  //           {scenario.name}
-  //         </h1>
-  //         <div className="mb-2">
-  //           <strong>Location:</strong> {scenario.location?.city},{" "}
-  //           {scenario.location?.state}
-  //         </div>
-  //         <div className="mb-2">
-  //           <strong>Income:</strong> ${scenario.income?.grossAnnual}
-  //         </div>
-  //         <div className="mb-2">
-  //           <strong>Expenses:</strong> ${scenario.expenses?.rent}
-  //         </div>
-  //         {/* Add more fields as needed */}
-  //         <button
-  //           className="mt-6 bg-blue-600 text-white px-4 py-2 rounded"
-  //           onClick={() => navigate(-1)}
-  //         >
-  //           Back
-  //         </button>
-  //       </div>
-  //       {/* Charts Section */}
-  //       <div className="mt-8 bg-white rounded shadow p-6">
-  //         <h2 className="text-xl font-semibold mb-4 text-blue-700">
-  //           Scenario Visualizations
-  //         </h2>
-  //         <ScenarioCharts scenario={scenario} />
-  //       </div>
-  //     </div>
-  //   );
 }

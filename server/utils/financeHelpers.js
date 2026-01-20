@@ -1,10 +1,10 @@
-export function toNumber(v) {
+function toNumber(v) {
   if (v === undefined || v === null || v === "") return 0;
   const n = Number(String(v).replace(/,/g, ""));
   return Number.isFinite(n) ? n : 0;
 }
 
-export function sumExpenses(expenses = {}) {
+function sumExpenses(expenses = {}) {
   let total = 0;
   const keys = [
     "rent",
@@ -26,7 +26,7 @@ export function sumExpenses(expenses = {}) {
   return total;
 }
 
-export function sumAssets(assets = {}) {
+function sumAssets(assets = {}) {
   return (
     toNumber(assets.cash) +
     toNumber(assets.investments) +
@@ -35,7 +35,7 @@ export function sumAssets(assets = {}) {
   );
 }
 
-export function sumLiabilities(liabilities = {}) {
+function sumLiabilities(liabilities = {}) {
   return (
     toNumber(liabilities.studentLoans) +
     toNumber(liabilities.mortgage) +
@@ -45,11 +45,11 @@ export function sumLiabilities(liabilities = {}) {
   );
 }
 
-export function computeNetWorth(assets = {}, liabilities = {}) {
+function computeNetWorth(assets = {}, liabilities = {}) {
   return sumAssets(assets) - sumLiabilities(liabilities);
 }
 
-export function computeAnnualSurplus(
+function computeAnnualSurplus(
   netAnnual = 0,
   additionalIncome = 0,
   expenses = {}
@@ -65,7 +65,7 @@ export function computeAnnualSurplus(
   // return base - totalAnnualExp;
 }
 
-export function computeAnnualSurplusViewCard(
+function computeAnnualSurplusViewCard(
   netAnnual = 0,
   additionalIncome = 0,
   expenses = {}
@@ -80,19 +80,19 @@ export function computeAnnualSurplusViewCard(
   return base - totalAnnualExp;
 }
 
-export function computeComprehensivePosition(netWorth = 0, annualSurplus = 0) {
+function computeComprehensivePosition(netWorth = 0, annualSurplus = 0) {
   netWorth = toNumber(netWorth);
   annualSurplus = toNumber(annualSurplus);
   return netWorth + annualSurplus;
 }
 
 // function that calculates net annual plus additonal income
-export function computeNetAnnual(netAnnual = 0, additionalIncome = 0) {
+function computeNetAnnual(netAnnual = 0, additionalIncome = 0) {
   return toNumber(netAnnual) + toNumber(additionalIncome);
 }
 
 // Optional: compute user's original metric corrected to subtract expenses and liabilities
-export function computeRequestedMetric(
+function computeRequestedMetric(
   netAnnual = 0,
   additionalIncome = 0,
   liabilities = {},
@@ -106,20 +106,20 @@ export function computeRequestedMetric(
   return net + add - liab - exp;
 }
 
-export function monthlyToAnnual(exp) {
+function monthlyToAnnual(exp) {
   return toNumber(exp) * 12;
 }
 
-export function annualToMonthly(exp) {
+function annualToMonthly(exp) {
   return toNumber(exp) / 12;
 }
 
-export function formatNumber(num) {
+function formatNumber(num) {
   return `$${num.toLocaleString()}`;
 }
 
 // format number short (e.g., 1500000 -> $1.5M)
-export function formatNumberShort(num) {
+function formatNumberShort(num) {
   if (num >= 1_000_000_000) {
     return `$${(num / 1_000_000_000).toFixed(1)}B`;
   } else if (num >= 1_000_000) {
@@ -132,7 +132,7 @@ export function formatNumberShort(num) {
 }
 
 // format number short no decimals (e.g., 1500000 -> $1M)
-export function formatNumberShortNoDecimals(num) {
+function formatNumberShortNoDecimals(num) {
   if (num >= 1_000_000_000) {
     return `$${Math.round(num / 1_000_000_000)}B`;
   } else if (num >= 1_000_000) {
@@ -145,7 +145,7 @@ export function formatNumberShortNoDecimals(num) {
 }
 
 // Estimate years to reach target net worth given current net worth, annual contributions, and annual return rate
-export function estimateYearsToTarget({
+function estimateYearsToTarget({
   netWorth = 0,
   annualContribution = 0,
   target = 0,
@@ -174,7 +174,7 @@ export function estimateYearsToTarget({
   return t;
 }
 
-export function estimateFIYear({
+function estimateFIYear({
   netWorth = 0,
   annualContribution = 0,
   target = 0,
@@ -191,7 +191,7 @@ export function estimateFIYear({
   return Math.ceil(currentYear + years);
 }
 
-export function resolveTargetNetWorth(scenario) {
+function resolveTargetNetWorth(scenario) {
   const explicit = toNumber(scenario?.fireGoal?.targetNetWorth);
   if (explicit > 0) return explicit;
 
@@ -202,12 +202,34 @@ export function resolveTargetNetWorth(scenario) {
 }
 
 // financeHelpers.js
-export function getConservativeAssumptions({ annualSurplus, returnRate }) {
+function getConservativeAssumptions({ annualSurplus, returnRate }) {
   return {
     adjustedSurplus: annualSurplus * 0.85,
     adjustedReturn: Math.max(returnRate - 0.02, 0.01),
   };
 }
+
+module.exports = {
+  toNumber,
+  sumExpenses,
+  sumAssets,
+  sumLiabilities,
+  computeNetWorth,
+  computeAnnualSurplus,
+  computeAnnualSurplusViewCard,
+  computeComprehensivePosition,
+  computeNetAnnual,
+  computeRequestedMetric,
+  monthlyToAnnual,
+  annualToMonthly,
+  formatNumber,
+  formatNumberShort,
+  formatNumberShortNoDecimals,
+  estimateYearsToTarget,
+  estimateFIYear,
+  resolveTargetNetWorth,
+  getConservativeAssumptions,
+};
 
 // This file contains helper functions for financial calculations.
 

@@ -73,6 +73,15 @@ const ScenarioSnapshotSchema = new mongoose.Schema(
       investmentReturnRate: Number,
       withdrawalRate: Number,
     },
+    // NEW: store snapshots of net worth over time
+    netWorthHistory: [
+      {
+        year: Number,
+        netWorth: Number,
+        annualSurplus: Number,
+        recordedAt: { type: Date, default: Date.now },
+      },
+    ],
     createdAt: Date,
     updatedAt: Date,
   },

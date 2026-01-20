@@ -11,6 +11,7 @@ import NetWorthLineChart from "./NetWorthLineChart";
 import IncomeVsExpensesPieChart from "./IncomeVsExpensesPieChart";
 import LiabilitiesPieChart from "./LiabilitiesPieChart";
 import IncomeVsLiabilitiesPieChart from "./IncomeVsLiabilitiesPieChart";
+import { buildNetWorthProjectionsFromScenario } from "../services/netWorthUtils";
 
 export default function ScenarioCharts({ scenario }) {
   const sliderRef = useRef(null);
@@ -45,6 +46,10 @@ export default function ScenarioCharts({ scenario }) {
       </button>
     );
   }
+
+  // Build net worth projections
+  const { historical, fiTarget, estimated, realistic } =
+    buildNetWorthProjectionsFromScenario(scenario);
 
   const settings = {
     dots: true,
@@ -99,7 +104,15 @@ export default function ScenarioCharts({ scenario }) {
         <h3 className="text-lg font-semibold mb-2 text-blue-700">
           Net Worth Over Time
         </h3>
-        <NetWorthLineChart netWorthHistory={scenario.netWorthHistory || []} />
+        <NetWorthLineChart
+          // historical={scenario.netWorthHistory || []}
+          // estimated={estimatedProjection}
+          // realistic={realisticProjection}
+          historical={historical}
+          fiTarget={fiTarget}
+          estimated={estimated}
+          realistic={realistic}
+        />
       </div>
       {/* <div>
         <h3 className="text-lg font-semibold mb-2 text-blue-700">

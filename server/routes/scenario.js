@@ -2,6 +2,15 @@ const express = require("express");
 const Scenario = require("../models/Scenario");
 const jwt = require("jsonwebtoken");
 const router = express.Router(); //router for defining routes
+const {
+  calculateScenarioOutcome,
+} = require("../services/scenarioCalculationService");
+
+const {
+  computeNetAnnual,
+  computeAnnualSurplus,
+  computeNetWorth,
+} = require("../utils/financeHelpers");
 
 // Simple JWT auth middleware
 function auth(req, res, next) {
@@ -21,13 +30,79 @@ function auth(req, res, next) {
 // Create a scenario
 router.post("/", auth, async (req, res) => {
   try {
-    const scenario = new Scenario({ ...req.body, user: req.user._id });
+    const calculation = calculateScenarioOutcome(req.body);
+
+    const currentNetWorth = computeNetWorth(
+      req.body.assets,
+      req.body.liabilities
+    );
+    const annualSurplus = computeAnnualSurplus(
+      computeNetAnnual(
+        req.body.income?.takeHome,
+        req.body.income?.additionalIncome
+      ),
+      req.body.income?.additionalIncome,
+      req.body.expenses
+    );
+
+    const scenario = new Scenario({
+      ...req.body,
+      user: req.user._id,
+      fireGoal: {
+        ...req.body.fireGoal,
+        estimatedFIYear: calculation.estimatedFIYear,
+        realisticFIYear: calculation.realisticFIYear,
+      },
+      netWorthHistory: [
+        {
+          year: new Date().getFullYear(),
+          netWorth: currentNetWorth,
+          annualSurplus,
+        },
+      ],
+    });
+
     await scenario.save();
     res.status(201).json(scenario);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
+
+// const {
+//   calculateScenarioOutcome,
+// } = require("../services/scenarioCalculationService");
+
+// router.post("/", auth, async (req, res) => {
+//   try {
+//     const calculation = calculateScenarioOutcome(req.body);
+
+//     const scenario = new Scenario({
+//       ...req.body,
+//       user: req.user._id,
+//       fireGoal: {
+//         ...req.body.fireGoal,
+//         estimatedFIYear: calculation.estimatedFIYear,
+//         realisticFIYear: calculation.realisticFIYear,
+//       },
+//     });
+
+//     await scenario.save();
+//     res.status(201).json(scenario);
+//   } catch (err) {
+//     res.status(400).json({ error: err.message });
+//   }
+// });
+
+// router.post("/", auth, async (req, res) => {
+//   try {
+//     const scenario = new Scenario({ ...req.body, user: req.user._id });
+//     await scenario.save();
+//     res.status(201).json(scenario);
+//   } catch (err) {
+//     res.status(400).json({ error: err.message });
+//   }
+// });
 
 // Get all scenarios for the logged-in user
 router.get("/", auth, async (req, res) => {
@@ -57,17 +132,109 @@ router.get("/:id", auth, async (req, res) => {
 // Update a scenario
 router.put("/:id", auth, async (req, res) => {
   try {
-    const scenario = await Scenario.findOneAndUpdate(
+    const existing = await Scenario.findOne({
+      _id: req.params.id,
+      user: req.user._id,
+    });
+
+    if (!existing) {
+      return res.status(404).json({ message: "Not found" });
+    }
+
+    // Merge existing + incoming changes
+    const merged = {
+      ...existing.toObject(),
+      ...req.body,
+    };
+
+    const calculation = calculateScenarioOutcome(merged);
+
+    merged.fireGoal = {
+      ...merged.fireGoal,
+      estimatedFIYear: calculation.estimatedFIYear,
+      realisticFIYear: calculation.realisticFIYear,
+    };
+
+    // --- Append historical snapshot ---
+    merged.netWorthHistory = merged.netWorthHistory || [];
+    const currentNetWorth = computeNetWorth(merged.assets, merged.liabilities);
+    const annualSurplus = computeAnnualSurplus(
+      computeNetAnnual(
+        merged.income?.takeHome,
+        merged.income?.additionalIncome
+      ),
+      merged.income?.additionalIncome,
+      merged.expenses
+    );
+
+    merged.netWorthHistory.push({
+      year: new Date().getFullYear(),
+      netWorth: currentNetWorth,
+      annualSurplus,
+    });
+
+    const updated = await Scenario.findOneAndUpdate(
       { _id: req.params.id, user: req.user._id },
-      req.body,
+      merged,
       { new: true }
     );
-    if (!scenario) return res.status(404).json({ message: "Not found" });
-    res.json(scenario);
+
+    res.json(updated);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
+
+// router.put("/:id", auth, async (req, res) => {
+//   try {
+//     const existing = await Scenario.findOne({
+//       _id: req.params.id,
+//       user: req.user._id,
+//     });
+
+//     if (!existing) {
+//       return res.status(404).json({ message: "Not found" });
+//     }
+
+//     // Merge existing + incoming changes
+//     const merged = {
+//       ...existing.toObject(),
+//       ...req.body,
+//     };
+
+//     const calculation = calculateScenarioOutcome(merged);
+
+//     merged.fireGoal = {
+//       ...merged.fireGoal,
+//       estimatedFIYear: calculation.estimatedFIYear,
+//       realisticFIYear: calculation.realisticFIYear,
+//     };
+
+//     const updated = await Scenario.findOneAndUpdate(
+//       { _id: req.params.id, user: req.user._id },
+//       merged,
+//       { new: true }
+//     );
+
+//     res.json(updated);
+//   } catch (err) {
+//     res.status(400).json({ error: err.message });
+//   }
+// });
+
+// router.put("/:id", auth, async (req, res) => {
+//   try {
+//     const scenario = await Scenario.findOneAndUpdate(
+//       { _id: req.params.id, user: req.user._id },
+//       req.body,
+//       { new: true }
+//     );
+//     if (!scenario) return res.status(404).json({ message: "Not found" });
+//     res.json(scenario);
+//   } catch (err) {
+//     res.status(400).json({ error: err.message });
+//   }
+// });
 
 // Delete a scenario
 router.delete("/:id", auth, async (req, res) => {
