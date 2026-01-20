@@ -7,43 +7,43 @@ require("dotenv").config();
 const app = express();
 
 // ✅ CORS allowlist (local + prod)
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://firelivingcalc1client.vercel.app",
-];
+// const allowedOrigins = [
+//   "http://localhost:5173",
+//   "https://firelivingcalc1client.vercel.app",
+// ];
 
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (!origin) return callback(null, true); // Postman, curl
-    if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-};
-
-// const allowedOrigins = [process.env.CLIENT_URL];
-
-// CORS configuration with dynamic origin checking local + prod from .env
 // const corsOptions = {
 //   origin: function (origin, callback) {
-//     // Allow non-browser tools
-//     if (!origin) return callback(null, true);
-
+//     if (!origin) return callback(null, true); // Postman, curl
 //     if (allowedOrigins.includes(origin)) {
 //       callback(null, true);
 //     } else {
-//       callback(new Error(`CORS blocked: ${origin}`));
+//       callback(new Error("Not allowed by CORS"));
 //     }
 //   },
 //   credentials: true,
 //   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
 //   allowedHeaders: ["Content-Type", "Authorization"],
 // };
+
+const allowedOrigins = [process.env.CLIENT_URL];
+
+// CORS configuration with dynamic origin checking local + prod from .env
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow non-browser tools
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error(`CORS blocked: ${origin}`));
+    }
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
 app.use(cors(corsOptions));
 // app.options("*", cors(corsOptions)); // Enable pre-flight for all routes
 app.use(express.json());
