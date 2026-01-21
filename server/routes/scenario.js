@@ -44,7 +44,8 @@ router.post("/", auth, async (req, res) => {
         req.body.income?.additionalIncome
       ),
       req.body.income?.additionalIncome,
-      req.body.expenses
+      // req.body.expenses
+      annualExpenses
     );
 
     const scenario = new Scenario({
@@ -167,7 +168,8 @@ router.put("/:id", auth, async (req, res) => {
         merged.income?.additionalIncome
       ),
       merged.income?.additionalIncome,
-      merged.expenses
+      // merged.expenses
+      merged.netWorthHistory?.annualExpenses || merged.expenses
     );
     const annualExpenses = computeAnnualExpenses(merged.expenses);
     merged.netWorthHistory.push({
