@@ -20,6 +20,13 @@ function formatNumber(value) {
   return num.toLocaleString("en-US");
 }
 
+// Get latest net worth snapshot from scenario
+function getLatestNetWorthSnapshot(snap) {
+  if (!Array.isArray(snap?.netWorthHistory)) return null;
+  if (snap.netWorthHistory.length === 0) return null;
+  return snap.netWorthHistory.at(-1);
+}
+
 const chartOptions = [
   {
     key: "expensePie",
@@ -254,6 +261,7 @@ export default function ScenarioComparisonDetails() {
             const scenarioId =
               comparison.scenarioIds?.[idx] || snap.scenarioId || snap._id;
             const chart = chartOptions.find((opt) => opt.key === selectedChart);
+            const latestHistory = getLatestNetWorthSnapshot(snap);
             return (
               <div key={idx} className="p-4 bg-gray-50 rounded shadow">
                 <h3 className="text-md font-bold mb-2 text-center">
@@ -292,6 +300,12 @@ export default function ScenarioComparisonDetails() {
                     <strong>Net Annual:</strong>{" "}
                     {snap.income?.netAnnual != null
                       ? `$${formatNumber(snap.income.netAnnual)}`
+                      : "---"}
+                  </div>
+                  <div>
+                    <strong>Annual Surplus:</strong>{" "}
+                    {latestHistory?.annualSurplus != null
+                      ? `$${formatNumber(latestHistory.annualSurplus)}`
                       : "---"}
                   </div>
                 </div>
