@@ -162,6 +162,7 @@ router.put("/:id", auth, async (req, res) => {
     // --- Append historical snapshot ---
     merged.netWorthHistory = merged.netWorthHistory || [];
     const currentNetWorth = computeNetWorth(merged.assets, merged.liabilities);
+    const annualExpenses = computeAnnualExpenses(merged.expenses);
     const annualSurplus = computeAnnualSurplus(
       computeNetAnnual(
         merged.income?.takeHome,
@@ -171,7 +172,6 @@ router.put("/:id", auth, async (req, res) => {
       // merged.expenses
       merged.netWorthHistory?.annualExpenses || merged.expenses
     );
-    const annualExpenses = computeAnnualExpenses(merged.expenses);
     merged.netWorthHistory.push({
       year: new Date().getFullYear(),
       netWorth: currentNetWorth,
