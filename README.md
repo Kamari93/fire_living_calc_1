@@ -1,19 +1,20 @@
-# Cost of Living & FIRE Calculator
+# Cost of Living Assistant
 
 Lightweight MERN app to model income, expenses, net worth and estimate a FIRE (financial independence) year. UX computes estimates live in the browser; the server verifies and persists computed audit data.
 
 Status: working MVP. AI integration (assistant/insights) — in progress.
 
-## Live App: [Cost of Living/FIRE Calc App](https://firelivingcalc1client.vercel.app/)
+## Live App: [Cost of Living Assistant](https://firelivingcalc1client.vercel.app/)
 
 ## Key features
 
-- Multi-step scenario form (income, expenses, assets, liabilities, FIRE goal)
-- Expenses normalized/stored as annual values
-- Live computed totals: expenses (annual/monthly), assets, liabilities, net worth, annual surplus
-- Estimated FI year computed from net worth, annual surplus, expected return and target net worth
-- Server-authoritative computedFIYear + audit inputs persisted (computedAt, computedInputs)
-- Comparison view with charts and tax breakdown popovers
+## Features
+
+- **Scenario Builder** — Add income, expenses, assets, liabilities, and FIRE goals
+- **Live Calculations** — See net worth, annual surplus, and estimated FI year in real-time
+- **Comparisons** — Compare multiple scenarios side-by-side with charts and tax breakdowns
+- **AI Insights** — Get AI-powered analysis and suggestions for your scenarios
+- **Server-Verified** — All calculations verified and persisted on the backend
 
 ---
 
@@ -70,21 +71,20 @@ Status: working MVP. AI integration (assistant/insights) — in progress.
 
 ---
 
-## How FI year is calculated (summary)
+## Inputs
 
-- Inputs:
-  - Current net worth (assets − liabilities)
-  - Annual contribution (annualSurplus = netAnnual + additionalIncome − totalAnnualExpenses)
-  - Target net worth (user-provided or computed as totalAnnualExpenses / withdrawalRate)
-  - Expected annual return (investmentReturnRate)
-- Math:
-  - Solves for t in: W*(1+r)^t + C*((1+r)^t − 1)/r ≥ target
-  - Uses closed-form: t = ln((T + C/r) / (W + C/r)) / ln(1+r)
-  - Edge handling: r = 0 (linear), zero/negative contributions → no finite solution shown as N/A
-- UX:
-  - Client computes an estimatedFIYear for live feedback.
-  - Client sends computed metadata on save.
-  - Server recomputes and writes authoritative computedFIYear, computedInputs, computedAt.
+- Current net worth (assets − liabilities)
+- Annual surplus (income − expenses)
+- Target net worth
+- Expected annual return rate
+
+---
+
+## How it works
+
+- Client computes live estimate for instant feedback
+- Server recomputes and stores authoritative value when scenario is saved
+- Audit trail includes computed inputs and timestamp
 
 ---
 
@@ -102,21 +102,11 @@ Status: working MVP. AI integration (assistant/insights) — in progress.
 
 ## Developer notes & suggestions
 
-- Store and treat expenses as annual values in the DB. Convert on the client only for display if needed.
-- Keep user-entered estimatedFIYear editable and separate from computedFIYear.
-- Add unit tests for finance helpers (estimateYearsToTarget edge cases).
-- Consider adding a UI to let users "accept computed FI" (copy computedFIYear → estimatedFIYear).
-- Provide a clear tooltip/info popover explaining assumptions (no tax/inflation, end-of-year contributions).
-
----
-
-## AI integration
-
-- Short note: AI-driven insights & assistant integrations are in progress. Plans:
-  - Contextual explanations of calculations
-  - Natural-language scenario summarization
-  - Interactive suggestion of saving targets or reducing expenses
-- No production AI features yet; follow security & privacy review before enabling user-facing AI.
+- All expenses stored as annual values in the database
+- Estimated FI year (user input) vs computed FI year (server-calculated) kept separate for audit trail
+- AI features require valid OPENAI_API_KEY in environment
+- Rate limiting applied to AI endpoints
+- User-entered FI estimates are editable and separate from server-computed values
 
 ---
 
