@@ -320,7 +320,9 @@ export default function ScenarioComparisonDetails() {
       </div>
       {/* AI Insights Section */}
       <div className="bg-white rounded shadow p-4 my-4">
-        <h3 className="font-semibold mb-2">AI Financial Comparison Insights</h3>
+        <h3 className="font-semibold mb-2">
+          Financial Comparison Insights Assistant
+        </h3>
 
         {!aiInsights && (
           <button
