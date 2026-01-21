@@ -1,10 +1,10 @@
-# Cost of Living Assistant
+# Financial Independence Assistant
 
 Lightweight MERN app to model income, expenses, net worth and estimate a FIRE (financial independence) year. UX computes estimates live in the browser; the server verifies and persists computed audit data.
 
 Status: working MVP. AI integration (assistant/insights) — in progress.
 
-## Live App: [Cost of Living Assistant](https://firelivingcalc1client.vercel.app/)
+## Live App: [Financial Independence Assistant](https://firelivingcalc1client.vercel.app/)
 
 ## Key features
 
