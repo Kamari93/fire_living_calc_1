@@ -580,7 +580,7 @@ export default function ViewScenario() {
 
       {/* AI Insights Section */}
       <div className="bg-white rounded shadow p-4 my-4">
-        <h3 className="font-semibold mb-2">Financial Insights Assistant</h3>
+        <h3 className="font-semibold mb-2">Financial Insights</h3>
 
         {!aiInsights && (
           <button
