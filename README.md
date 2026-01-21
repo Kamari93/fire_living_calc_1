@@ -4,8 +4,6 @@ A MERN app to model income, expenses, and estimate your path to financial indepe
 
 ## Live App: [Financial Independence Assistant](https://firelivingcalc1client.vercel.app/)
 
-## Key features
-
 ## Features
 
 - **Scenario Builder** — Add income, expenses, assets, liabilities, and FIRE goals
