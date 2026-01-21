@@ -1,6 +1,6 @@
 # Financial Independence Assistant
 
-Lightweight MERN app to model income, expenses, net worth and estimate a FIRE (financial independence) year. UX computes estimates live in the browser; the server verifies and persists computed audit data.
+A MERN app to model income, expenses, and estimate your path to financial independence (FIRE). Build scenarios, compare them with charts, and get AI-powered insights.
 
 ## Live App: [Financial Independence Assistant](https://firelivingcalc1client.vercel.app/)
 
