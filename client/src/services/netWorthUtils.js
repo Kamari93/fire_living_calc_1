@@ -40,7 +40,7 @@ export function generateNetWorthProjection({
   currentNetWorth,
   annualSurplus,
   returnRate,
-  //   targetNetWorth,
+  targetNetWorth,
   endYear,
 }) {
   const projection = [];
@@ -49,8 +49,8 @@ export function generateNetWorthProjection({
   for (let year = startYear; year <= endYear; year++) {
     netWorth = netWorth * (1 + returnRate) + annualSurplus;
     projection.push({ year, netWorth });
-    // if (netWorth >= targetNetWorth) break; // optional stop at target
-    if (year === endYear) break;
+    if (netWorth >= targetNetWorth) break; // optional stop at target
+    // if (year === endYear) break;
   }
 
   return projection;
