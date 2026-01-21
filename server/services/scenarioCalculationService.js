@@ -2,6 +2,7 @@
 
 const {
   computeNetWorth,
+  computeAnnualExpenses,
   computeAnnualSurplus,
   computeNetAnnual,
   estimateFIYear,
@@ -30,6 +31,9 @@ function calculateScenarioOutcome(scenario) {
     scenario.income?.additionalIncome,
     scenario.expenses
   );
+
+  // --- Expenses ---
+  const annualExpenses = computeAnnualExpenses(scenario.expenses);
 
   // --- Net worth ---
   const currentNetWorth = computeNetWorth(

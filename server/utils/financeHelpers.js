@@ -209,11 +209,17 @@ function getConservativeAssumptions({ annualSurplus, returnRate }) {
   };
 }
 
+function computeAnnualExpenses(expenses = {}) {
+  const monthly = sumExpenses(expenses);
+  return monthlyToAnnual(monthly);
+}
+
 module.exports = {
   toNumber,
   sumExpenses,
   sumAssets,
   sumLiabilities,
+  computeAnnualExpenses,
   computeNetWorth,
   computeAnnualSurplus,
   computeAnnualSurplusViewCard,

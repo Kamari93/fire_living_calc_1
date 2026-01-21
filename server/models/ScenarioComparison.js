@@ -78,6 +78,7 @@ const ScenarioSnapshotSchema = new mongoose.Schema(
       {
         year: Number,
         netWorth: Number,
+        annualExpenses: Number,
         annualSurplus: Number,
         recordedAt: { type: Date, default: Date.now },
       },

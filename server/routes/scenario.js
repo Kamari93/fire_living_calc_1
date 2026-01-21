@@ -9,6 +9,7 @@ const {
 const {
   computeNetAnnual,
   computeAnnualSurplus,
+  computeAnnualExpenses,
   computeNetWorth,
 } = require("../utils/financeHelpers");
 
@@ -36,6 +37,7 @@ router.post("/", auth, async (req, res) => {
       req.body.assets,
       req.body.liabilities
     );
+    const annualExpenses = computeAnnualExpenses(req.body.expenses);
     const annualSurplus = computeAnnualSurplus(
       computeNetAnnual(
         req.body.income?.takeHome,
@@ -57,6 +59,7 @@ router.post("/", auth, async (req, res) => {
         {
           year: new Date().getFullYear(),
           netWorth: currentNetWorth,
+          annualExpenses,
           annualSurplus,
         },
       ],
@@ -166,11 +169,12 @@ router.put("/:id", auth, async (req, res) => {
       merged.income?.additionalIncome,
       merged.expenses
     );
-
+    const annualExpenses = computeAnnualExpenses(merged.expenses);
     merged.netWorthHistory.push({
       year: new Date().getFullYear(),
       netWorth: currentNetWorth,
       annualSurplus,
+      annualExpenses,
     });
 
     const updated = await Scenario.findOneAndUpdate(
