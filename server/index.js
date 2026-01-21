@@ -36,7 +36,7 @@ app.use("/api/scenarios", require("./routes/scenario"));
 app.use("/api/scenario-comparisons", require("./routes/scenarioComparison"));
 app.use("/api/ai", require("./routes/ai"));
 
-// 🔥 TEST ROUTE (optional, can keep or remove)
+// 🔥 TEST ROUTE for api health
 app.get("/api/health", (req, res) => {
   res.status(200).json({ status: "ok" });
 });
