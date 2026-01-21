@@ -49,22 +49,29 @@ function computeNetWorth(assets = {}, liabilities = {}) {
   return sumAssets(assets) - sumLiabilities(liabilities);
 }
 
-function computeAnnualSurplus(
-  netAnnual = 0,
-  additionalIncome = 0,
-  // expenses = {}
-  expenses = 0
-) {
-  // netAnnual is expected to be takeHome + additionalIncome if available.
-  // Use netAnnual if present; otherwise fallback to additionalIncome (rare).
-  const net = toNumber(netAnnual);
-  const add = toNumber(additionalIncome);
-  // const totalExp = sumExpenses(expenses);
-  const totalExp = toNumber(expenses);
-  // const totalAnnualExp = monthlyToAnnual(totalExp);
-  const base = net !== 0 ? net : add;
-  return base - totalExp;
-  // return base - totalAnnualExp;
+// function computeAnnualSurplus(
+//   netAnnual = 0,
+//   additionalIncome = 0,
+//   expenses = {}
+//   // expenses = 0
+// ) {
+//   // netAnnual is expected to be takeHome + additionalIncome if available.
+//   // Use netAnnual if present; otherwise fallback to additionalIncome (rare).
+//   const net = toNumber(netAnnual);
+//   const add = toNumber(additionalIncome);
+//   const totalExp = sumExpenses(expenses);
+//   // const totalExp = toNumber(expenses);
+//   // const totalAnnualExp = monthlyToAnnual(totalExp);
+//   const base = net !== 0 ? net : add;
+//   return base - totalExp;
+//   // return base - totalAnnualExp;
+// }
+
+function computeAnnualSurplus(netAnnual = 0, annualExpenses = 0) {
+  if (typeof annualExpenses !== "number") {
+    throw new Error("computeAnnualSurplus expects annualExpenses as a number");
+  }
+  return toNumber(netAnnual) - toNumber(annualExpenses);
 }
 
 function computeAnnualSurplusViewCard(

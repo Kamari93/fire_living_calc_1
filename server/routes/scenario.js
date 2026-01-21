@@ -37,16 +37,21 @@ router.post("/", auth, async (req, res) => {
       req.body.assets,
       req.body.liabilities
     );
-    const annualExpenses = computeAnnualExpenses(req.body.expenses);
-    const annualSurplus = computeAnnualSurplus(
-      computeNetAnnual(
-        req.body.income?.takeHome,
-        req.body.income?.additionalIncome
-      ),
-      req.body.income?.additionalIncome,
-      // req.body.expenses
-      annualExpenses
+    const netAnnual = computeNetAnnual(
+      req.body.income?.takeHome,
+      req.body.income?.additionalIncome
     );
+    const annualExpenses = computeAnnualExpenses(req.body.expenses);
+    const annualSurplus = computeAnnualSurplus(netAnnual, annualExpenses);
+    // const annualSurplus = computeAnnualSurplus(
+    //   computeNetAnnual(
+    //     req.body.income?.takeHome,
+    //     req.body.income?.additionalIncome
+    //   ),
+    //   req.body.income?.additionalIncome,
+    //   // req.body.expenses
+    //   annualExpenses
+    // );
 
     const scenario = new Scenario({
       ...req.body,
@@ -162,16 +167,21 @@ router.put("/:id", auth, async (req, res) => {
     // --- Append historical snapshot ---
     merged.netWorthHistory = merged.netWorthHistory || [];
     const currentNetWorth = computeNetWorth(merged.assets, merged.liabilities);
-    const annualExpenses = computeAnnualExpenses(merged.expenses);
-    const annualSurplus = computeAnnualSurplus(
-      computeNetAnnual(
-        merged.income?.takeHome,
-        merged.income?.additionalIncome
-      ),
-      merged.income?.additionalIncome,
-      // merged.expenses
-      merged.netWorthHistory?.annualExpenses || merged.expenses
+    const netAnnual = computeNetAnnual(
+      merged.income?.takeHome,
+      merged.income?.additionalIncome
     );
+    const annualExpenses = computeAnnualExpenses(merged.expenses);
+    const annualSurplus = computeAnnualSurplus(netAnnual, annualExpenses);
+    // const annualSurplus = computeAnnualSurplus(
+    //   computeNetAnnual(
+    //     merged.income?.takeHome,
+    //     merged.income?.additionalIncome
+    //   ),
+    //   merged.income?.additionalIncome,
+    //   // merged.expenses
+    //   merged.netWorthHistory?.annualExpenses || merged.expenses
+    // );
     merged.netWorthHistory.push({
       year: new Date().getFullYear(),
       netWorth: currentNetWorth,
