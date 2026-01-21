@@ -18,7 +18,7 @@ const Home = () => {
     <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100">
       <div className="max-w-xl w-full p-8 bg-white rounded shadow text-center">
         <h1 className="text-3xl font-bold mb-2 text-blue-700">
-          Cost of Living & FI Analyzer
+          Financial Independence Assistant
         </h1>
         <p className="text-lg text-gray-700 mb-6">
           Plan, compare, and visualize your path to Financial Independence.
