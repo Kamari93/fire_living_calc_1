@@ -13,4 +13,21 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+// 🚪 Handle expired / invalid sessions globally
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      // Clear auth state
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+
+      // Redirect user no matter where they are
+      window.location.href = "/";
+    }
+
+    return Promise.reject(error);
+  }
+);
+
 export default api;
