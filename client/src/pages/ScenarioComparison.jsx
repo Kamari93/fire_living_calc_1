@@ -213,6 +213,9 @@ export default function ScenarioComparison() {
       <div className="mb-4 bg-white rounded shadow p-6 py-4">
         <h2 className="text-lg font-semibold mb-2">Select Scenarios:</h2>
         <div className="mb-2 h-30 overflow-y-scroll space-y-2 p-2 rounded bg-gray-50 shadow">
+          <div className="text-sm text-gray-600 mb-2">
+            Selected {selectedIds.length} of {MAX_SCENARIOS}
+          </div>
           {scenarios.map((s) => (
             <label key={s._id} className="block mb-1">
               <input
@@ -225,9 +228,9 @@ export default function ScenarioComparison() {
               {s.name} ({s.location?.city ?? "N/A"})
             </label>
           ))}
-          <div className="text-sm text-gray-600 mb-2">
+          {/* <div className="text-sm text-gray-600 mb-2">
             Selected {selectedIds.length} of {MAX_SCENARIOS}
-          </div>
+          </div> */}
 
           {hasMaxSelected && (
             <div className="text-xs text-orange-600 mb-2">
