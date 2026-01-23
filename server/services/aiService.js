@@ -68,14 +68,14 @@ async function generateScenarioComparisonInsights(comparison) {
     }
 
     const prompt = `
-You are a conservative financial assistant helping a user compare 2 snapshots of scenarios.
+You are a conservative financial assistant helping a user compare 2 - 4 snapshots of scenarios.
 
 Here are the scenarios being compared (JSON):
 
 ${JSON.stringify(comparison.snapshots, null, 2)}
 
 Provide:
-1. Most advantageous scenario (1 to 4 sentences) based on the scenario data
+1. Most advantageous scenario (1 to 5 sentences) based on the scenario data
 
 Keep it concise and non-judgmental.
 `;

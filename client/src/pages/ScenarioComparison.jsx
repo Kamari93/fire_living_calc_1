@@ -14,6 +14,13 @@ export default function ScenarioComparison() {
   const [savedComparisons, setSavedComparisons] = useState([]);
   const [filterText, setFilterText] = useState("");
   const [error, setError] = useState("");
+  // selection limits
+  const MIN_SCENARIOS = 2;
+  const MAX_SCENARIOS = 4;
+
+  const hasMinSelected = selectedIds.length >= MIN_SCENARIOS;
+  const hasMaxSelected = selectedIds.length >= MAX_SCENARIOS;
+
   const navigate = useNavigate();
   // axios.defaults.withCredentials = true;
 
@@ -110,32 +117,6 @@ export default function ScenarioComparison() {
     setLoading(true);
     setError("");
     setSaveSuccess("");
-    // try {
-    //   const token = localStorage.getItem("token");
-    //   const res = await axios.post(
-    //     "https://firelivingcalc1server.vercel.app/api/scenario-comparisons",
-    //     {
-    //       scenarioIds: selectedIds.map(String),
-    //       title: comparisonTitle,
-    //       notes: comparisonNotes,
-    //     },
-    //     {
-    //       withCredentials: true,
-    //       headers: { Authorization: `Bearer ${token}` },
-    //     }
-    //   );
-    //   setComparison(res.data); // Show immediate feedback
-    //   setSaveSuccess("Comparison saved!");
-    //   setSelectedIds([]);
-    //   setComparisonTitle("");
-    //   setComparisonNotes("");
-    //   await fetchSavedComparisons(); // Refresh saved comparisons
-    // } catch (err) {
-    //   setError("Failed to create comparison.");
-    //   console.error("Error creating comparison:", err);
-    // } finally {
-    //   setLoading(false);
-    // }
     try {
       const res = await api.post("/scenario-comparisons", {
         scenarioIds: selectedIds.map(String),
@@ -237,12 +218,22 @@ export default function ScenarioComparison() {
               <input
                 type="checkbox"
                 checked={selectedIds.includes(s._id)}
+                disabled={!selectedIds.includes(s._id) && hasMaxSelected}
                 onChange={() => handleSelect(s._id)}
                 className="mr-2"
               />
               {s.name} ({s.location?.city ?? "N/A"})
             </label>
           ))}
+          <div className="text-sm text-gray-600 mb-2">
+            Selected {selectedIds.length} of {MAX_SCENARIOS}
+          </div>
+
+          {hasMaxSelected && (
+            <div className="text-xs text-orange-600 mb-2">
+              Maximum of {MAX_SCENARIOS} scenarios can be compared at once.
+            </div>
+          )}
         </div>
         <div className="mb-2">
           <input
@@ -260,13 +251,29 @@ export default function ScenarioComparison() {
             rows={2}
           />
         </div>
-        <button
+        {/* <button
           className="bg-blue-500 text-white px-4 py-2 rounded mt-2"
           onClick={handleCompare}
           disabled={loading}
         >
           Compare Selected
+        </button> */}
+        <button
+          className={`px-4 py-2 rounded mt-2 ${
+            hasMinSelected
+              ? "bg-blue-500 text-white"
+              : "bg-gray-300 text-gray-500 cursor-not-allowed"
+          }`}
+          onClick={handleCompare}
+          disabled={!hasMinSelected || loading}
+        >
+          Compare Selected
         </button>
+        {!hasMinSelected && (
+          <div className="text-xs text-gray-500 mt-1">
+            Select at least {MIN_SCENARIOS} scenarios to enable comparison.
+          </div>
+        )}
         {saveSuccess && (
           <div className="text-green-600 mb-2">{saveSuccess}</div>
         )}
