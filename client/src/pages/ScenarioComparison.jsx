@@ -228,15 +228,12 @@ export default function ScenarioComparison() {
               {s.name} ({s.location?.city ?? "N/A"})
             </label>
           ))}
-          {/* <div className="text-sm text-gray-600 mb-2">
-            Selected {selectedIds.length} of {MAX_SCENARIOS}
-          </div> */}
-          {hasMaxSelected && (
-            <div className="text-xs text-orange-600 mb-2">
-              Maximum of {MAX_SCENARIOS} scenarios can be compared at once.
-            </div>
-          )}
         </div>
+        {hasMaxSelected && (
+          <div className="text-xs text-orange-600 mb-2">
+            Maximum of {MAX_SCENARIOS} scenarios can be compared at once.
+          </div>
+        )}
         <div className="mb-2">
           <input
             type="text"
