@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const ScenarioComparison = require("../models/ScenarioComparison");
+const AIInteraction = require("../models/AIInteraction");
 const Scenario = require("../models/Scenario");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
@@ -95,12 +96,19 @@ router.get("/:id", auth, async (req, res) => {
 // Delete a comparison
 router.delete("/:id", auth, async (req, res) => {
   try {
+    const comparisonId = req.params.id;
     const result = await ScenarioComparison.deleteOne({
-      _id: req.params.id,
+      // _id: req.params.id,
+      _id: comparisonId,
       userId: req.user._id,
     });
     if (result.deletedCount === 0)
       return res.status(404).json({ message: "Not found" });
+    // Also delete related AIInteractions
+    await AIInteraction.deleteMany({
+      comparisonId,
+      userId: req.user._id,
+    });
     res.json({ success: true });
   } catch (err) {
     res.status(400).json({ error: err.message });

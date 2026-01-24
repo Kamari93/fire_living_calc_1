@@ -1,5 +1,6 @@
 const express = require("express");
 const Scenario = require("../models/Scenario");
+const AIInteraction = require("../models/AIInteraction");
 const jwt = require("jsonwebtoken");
 const router = express.Router(); //router for defining routes
 const {
@@ -255,12 +256,19 @@ router.put("/:id", auth, async (req, res) => {
 // Delete a scenario
 router.delete("/:id", auth, async (req, res) => {
   try {
+    const scenarioId = req.params.id;
     const result = await Scenario.deleteOne({
-      _id: req.params.id,
+      // _id: req.params.id,
+      _id: scenarioId,
       user: req.user._id,
     });
     if (result.deletedCount === 0)
       return res.status(404).json({ message: "Not found" });
+    // Also delete related AIInteractions
+    await AIInteraction.deleteMany({
+      scenarioId,
+      userId: req.user._id,
+    });
     res.json({ success: true });
   } catch (err) {
     res.status(400).json({ error: err.message });
