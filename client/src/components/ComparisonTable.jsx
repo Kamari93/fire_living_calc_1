@@ -279,74 +279,81 @@ export default function ComparisonTable({ snapshots = [] }) {
 
   return (
     <div className="overflow-x-auto">
-      <table className="min-w-full border-collapse text-sm">
-        <thead>
-          <tr>
-            <th className="border px-3 py-2 text-left bg-gray-100">Metric</th>
-            {snapshots.map((snap, idx) => (
-              <th
-                key={snap._id || idx}
-                className="border px-3 py-2 text-center font-semibold bg-gray-50"
-              >
-                {snap.name}
-                <br />
-                {snap.location?.city ? `${snap.location.city}` : ""}
-              </th>
-            ))}
-          </tr>
-        </thead>
+      <div className="bg-white rounded-xl shadow-md p-4">
+        <table className="min-w-full border-collapse text-sm">
+          <thead>
+            <tr>
+              <th className="border px-3 py-2 text-left bg-gray-100">Metric</th>
+              {snapshots.map((snap, idx) => (
+                <th
+                  key={snap._id || idx}
+                  className="border px-3 py-2 text-center font-semibold bg-gray-50"
+                >
+                  {snap.name}
+                  <br />
+                  {snap.location?.city ? `${snap.location.city}` : ""}
+                </th>
+              ))}
+            </tr>
+          </thead>
 
-        <tbody>
-          {metrics.map((metric) => {
-            const values = snapshots.map((s) => metric.value(s));
-            const clean = values.filter(Number.isFinite);
-            const min = Math.min(...clean);
-            const max = Math.max(...clean);
-            const ranks = getRanks(values, metric.better);
+          <tbody>
+            {metrics.map((metric) => {
+              const values = snapshots.map((s) => metric.value(s));
+              const clean = values.filter(Number.isFinite);
+              const min = Math.min(...clean);
+              const max = Math.max(...clean);
+              const ranks = getRanks(values, metric.better);
 
-            return (
-              <tr key={metric.label}>
-                <td className="border px-3 py-2 font-medium bg-gray-50">
-                  {metric.label}
-                </td>
+              return (
+                <tr key={metric.label}>
+                  <td className="border px-3 py-2 font-medium bg-gray-50">
+                    {metric.label}
+                  </td>
 
-                {snapshots.map((snap, idx) => {
-                  const value = metric.value(snap);
-                  const scaled = getScaledValue(value, min, max, metric.better);
-                  const display = metric.format
-                    ? metric.format(value)
-                    : value ?? "—";
+                  {snapshots.map((snap, idx) => {
+                    const value = metric.value(snap);
+                    const scaled = getScaledValue(
+                      value,
+                      min,
+                      max,
+                      metric.better
+                    );
+                    const display = metric.format
+                      ? metric.format(value)
+                      : value ?? "—";
 
-                  return (
-                    <td
-                      key={idx}
-                      className="border px-3 py-2 text-center align-middle"
-                    >
-                      <div className="space-y-1">
-                        {/* Rank */}
-                        <div className="text-xs text-gray-500">
-                          Rank {ranks[idx]}
+                    return (
+                      <td
+                        key={idx}
+                        className="border px-3 py-2 text-center align-middle"
+                      >
+                        <div className="space-y-1">
+                          {/* Rank */}
+                          <div className="text-xs text-gray-500">
+                            Rank {ranks[idx]}
+                          </div>
+
+                          {/* Bar */}
+                          <div className="h-2 bg-gray-200 rounded">
+                            <div
+                              className="h-2 bg-green-700 rounded"
+                              style={{ width: `${scaled}%` }}
+                            />
+                          </div>
+
+                          {/* Value */}
+                          <div className="text-sm">{display}</div>
                         </div>
-
-                        {/* Bar */}
-                        <div className="h-2 bg-gray-200 rounded">
-                          <div
-                            className="h-2 bg-green-700 rounded"
-                            style={{ width: `${scaled}%` }}
-                          />
-                        </div>
-
-                        {/* Value */}
-                        <div className="text-sm">{display}</div>
-                      </div>
-                    </td>
-                  );
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
