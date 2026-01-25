@@ -290,7 +290,7 @@ export default function ComparisonTable({ snapshots = [] }) {
               >
                 {snap.name}
                 <br />
-                {snap.location?.city ? ` - ${snap.location.city}` : ""}
+                {snap.location?.city ? `${snap.location.city}` : ""}
               </th>
             ))}
           </tr>
