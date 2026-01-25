@@ -192,52 +192,42 @@
 import React from "react";
 
 /**
- * Column identity colors (stable across table + charts)
+ * Format numbers as dollars
  */
-const COLUMN_COLORS = [
-  "bg-blue-50",
-  "bg-purple-50",
-  "bg-teal-50",
-  "bg-orange-50",
-];
-
-function getColumnClass(idx) {
-  return COLUMN_COLORS[idx] ?? "bg-gray-50";
-}
-
-// function formatNumber(n) {
-//   if (n == null || isNaN(n)) return "—";
-//   return n.toLocaleString("en-US", {
-//     maximumFractionDigits: 0,
-//   });
-// }
-
-// format number with dollar signs
 function formatNumber(n) {
   if (n == null || isNaN(n)) return "—";
-  return `$${n.toLocaleString("en-US", {
-    maximumFractionDigits: 0,
-  })}`;
+  return `$${n.toLocaleString("en-US", { maximumFractionDigits: 0 })}`;
 }
 
 /**
- * Generic best / worst resolver
+ * Scale values to 0–100 range
  */
-function getExtremes(values, better) {
-  const clean = values.filter(Number.isFinite);
-  if (!clean.length) return {};
+function getScaledValue(value, min, max, better) {
+  if (!Number.isFinite(value) || min === max) return 0;
 
-  return better === "lower"
-    ? { best: Math.min(...clean), worst: Math.max(...clean) }
-    : { best: Math.max(...clean), worst: Math.min(...clean) };
+  const raw = (value - min) / (max - min);
+  return better === "lower" ? (1 - raw) * 100 : raw * 100;
+}
+
+/**
+ * Rank values (1 = best)
+ */
+function getRanks(values, better) {
+  const sorted = [...values]
+    .map((v, i) => ({ v, i }))
+    .sort((a, b) => (better === "lower" ? a.v - b.v : b.v - a.v));
+
+  const ranks = Array(values.length);
+  sorted.forEach((item, idx) => {
+    ranks[item.i] = idx + 1;
+  });
+
+  return ranks;
 }
 
 export default function ComparisonTable({ snapshots = [] }) {
   if (snapshots.length < 2) return null;
 
-  /**
-   * Metric definitions (single source of truth)
-   */
   const metrics = [
     {
       label: "Gross Income",
@@ -259,10 +249,7 @@ export default function ComparisonTable({ snapshots = [] }) {
     },
     {
       label: "Monthly Expenses",
-      value: (s) => {
-        const annual = s.netWorthHistory?.at(-1)?.annualExpenses ?? 0;
-        return annual / 12;
-      },
+      value: (s) => (s.netWorthHistory?.at(-1)?.annualExpenses ?? 0) / 12,
       format: formatNumber,
       better: "lower",
     },
@@ -299,9 +286,7 @@ export default function ComparisonTable({ snapshots = [] }) {
             {snapshots.map((snap, idx) => (
               <th
                 key={snap._id || idx}
-                className={`border px-3 py-2 text-center font-semibold ${getColumnClass(
-                  idx
-                )}`}
+                className="border px-3 py-2 text-center font-semibold bg-gray-50"
               >
                 {snap.name}
               </th>
@@ -312,7 +297,10 @@ export default function ComparisonTable({ snapshots = [] }) {
         <tbody>
           {metrics.map((metric) => {
             const values = snapshots.map((s) => metric.value(s));
-            const { best, worst } = getExtremes(values, metric.better);
+            const clean = values.filter(Number.isFinite);
+            const min = Math.min(...clean);
+            const max = Math.max(...clean);
+            const ranks = getRanks(values, metric.better);
 
             return (
               <tr key={metric.label}>
@@ -322,22 +310,33 @@ export default function ComparisonTable({ snapshots = [] }) {
 
                 {snapshots.map((snap, idx) => {
                   const value = metric.value(snap);
+                  const scaled = getScaledValue(value, min, max, metric.better);
                   const display = metric.format
                     ? metric.format(value)
                     : value ?? "—";
 
-                  let perfClass = "";
-                  if (value === best) perfClass = "bg-green-100 font-semibold";
-                  if (value === worst) perfClass = "bg-red-100 font-semibold";
-
                   return (
                     <td
                       key={idx}
-                      className={`border px-3 py-2 text-center ${getColumnClass(
-                        idx
-                      )} ${perfClass}`}
+                      className="border px-3 py-2 text-center align-middle"
                     >
-                      {display}
+                      <div className="space-y-1">
+                        {/* Rank */}
+                        <div className="text-xs text-gray-500">
+                          Rank {ranks[idx]}
+                        </div>
+
+                        {/* Bar */}
+                        <div className="h-2 bg-gray-200 rounded">
+                          <div
+                            className="h-2 bg-gray-700 rounded"
+                            style={{ width: `${scaled}%` }}
+                          />
+                        </div>
+
+                        {/* Value */}
+                        <div className="text-sm">{display}</div>
+                      </div>
                     </td>
                   );
                 })}
