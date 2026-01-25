@@ -279,7 +279,7 @@ export default function ComparisonTable({ snapshots = [] }) {
 
   return (
     <div className="overflow-x-auto">
-      <table className="min-w-full border-collapse text-sm">
+      <table className="min-w-full border-collapse text-sm rounded shadow-md">
         <thead>
           <tr>
             <th className="border px-3 py-2 text-left bg-gray-100">Metric</th>
