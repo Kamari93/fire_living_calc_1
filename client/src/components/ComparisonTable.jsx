@@ -205,11 +205,19 @@ function getColumnClass(idx) {
   return COLUMN_COLORS[idx] ?? "bg-gray-50";
 }
 
+// function formatNumber(n) {
+//   if (n == null || isNaN(n)) return "—";
+//   return n.toLocaleString("en-US", {
+//     maximumFractionDigits: 0,
+//   });
+// }
+
+// format number with dollar signs
 function formatNumber(n) {
   if (n == null || isNaN(n)) return "—";
-  return n.toLocaleString("en-US", {
+  return `$${n.toLocaleString("en-US", {
     maximumFractionDigits: 0,
-  });
+  })}`;
 }
 
 /**
