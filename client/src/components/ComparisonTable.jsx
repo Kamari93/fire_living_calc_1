@@ -289,6 +289,8 @@ export default function ComparisonTable({ snapshots = [] }) {
                 className="border px-3 py-2 text-center font-semibold bg-gray-50"
               >
                 {snap.name}
+                <br />
+                {snap.location?.city ? ` - ${snap.location.city}` : ""}
               </th>
             ))}
           </tr>
