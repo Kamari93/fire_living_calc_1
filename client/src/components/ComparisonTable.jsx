@@ -331,7 +331,7 @@ export default function ComparisonTable({ snapshots = [] }) {
                         {/* Bar */}
                         <div className="h-2 bg-gray-200 rounded">
                           <div
-                            className="h-2 bg-blue-700 rounded"
+                            className="h-2 bg-green-700 rounded"
                             style={{ width: `${scaled}%` }}
                           />
                         </div>
