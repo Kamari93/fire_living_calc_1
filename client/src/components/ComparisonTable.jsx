@@ -279,7 +279,7 @@ export default function ComparisonTable({ snapshots = [] }) {
 
   return (
     <div className="overflow-x-auto">
-      <div className="bg-white rounded-lg shadow-md p-4">
+      <div className="bg-white rounded-md shadow-md p-4">
         <table className="min-w-full border-collapse text-sm">
           <thead>
             <tr>
