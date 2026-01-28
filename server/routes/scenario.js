@@ -44,15 +44,6 @@ router.post("/", auth, async (req, res) => {
     );
     const annualExpenses = computeAnnualExpenses(req.body.expenses);
     const annualSurplus = computeAnnualSurplus(netAnnual, annualExpenses);
-    // const annualSurplus = computeAnnualSurplus(
-    //   computeNetAnnual(
-    //     req.body.income?.takeHome,
-    //     req.body.income?.additionalIncome
-    //   ),
-    //   req.body.income?.additionalIncome,
-    //   // req.body.expenses
-    //   annualExpenses
-    // );
 
     const scenario = new Scenario({
       ...req.body,
@@ -78,31 +69,6 @@ router.post("/", auth, async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
-
-// const {
-//   calculateScenarioOutcome,
-// } = require("../services/scenarioCalculationService");
-
-// router.post("/", auth, async (req, res) => {
-//   try {
-//     const calculation = calculateScenarioOutcome(req.body);
-
-//     const scenario = new Scenario({
-//       ...req.body,
-//       user: req.user._id,
-//       fireGoal: {
-//         ...req.body.fireGoal,
-//         estimatedFIYear: calculation.estimatedFIYear,
-//         realisticFIYear: calculation.realisticFIYear,
-//       },
-//     });
-
-//     await scenario.save();
-//     res.status(201).json(scenario);
-//   } catch (err) {
-//     res.status(400).json({ error: err.message });
-//   }
-// });
 
 // router.post("/", auth, async (req, res) => {
 //   try {

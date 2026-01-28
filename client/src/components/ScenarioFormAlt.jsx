@@ -543,7 +543,7 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
         const refreshed = await api.get(`/scenarios/${scenario._id}`);
         onScenarioSaved(refreshed.data);
       } else {
-        await api.post("/scenarios", cleaned);
+        // await api.post("/scenarios", cleaned);
         const created = await api.post("/scenarios", cleaned);
         onScenarioSaved(created.data);
       }
