@@ -45,8 +45,20 @@ export default function ExpenseBarChartAnnual({ expenses }) {
       name: "Discretionary",
       value: monthlyToAnnual(expenses.discretionary ?? 0),
     },
-    // Add custom expenses if needed
-  ].filter((item) => item.value > 0); // Only show non-zero expenses
+    ...(Array.isArray(expenses.customExpenses)
+      ? expenses.customExpenses
+          .filter(
+            (e) =>
+              e &&
+              typeof e.label === "string" &&
+              Number.isFinite(Number(e.amount))
+          )
+          .map((expense, idx) => ({
+            name: expense.label || `Custom ${idx + 1}`,
+            value: Number(expense.amount),
+          }))
+      : []),
+  ].filter((item) => item.value > 0); // Only show non-zero expenses;
 
   return (
     <div className="my-8">
