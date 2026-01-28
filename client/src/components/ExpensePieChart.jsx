@@ -22,7 +22,19 @@ export default function ExpensePieChart({ expenses }) {
     { name: "Transportation", value: expenses.transportation ?? 0 },
     { name: "Utilities", value: expenses.utilities ?? 0 },
     { name: "Discretionary", value: expenses.discretionary ?? 0 },
-    // Add custom expenses if needed
+    ...(Array.isArray(expenses.customExpenses)
+      ? expenses.customExpenses
+          .filter(
+            (e) =>
+              e &&
+              typeof e.label === "string" &&
+              Number.isFinite(Number(e.amount))
+          )
+          .map((expense, idx) => ({
+            name: expense.label || `Custom ${idx + 1}`,
+            value: Number(expense.amount),
+          }))
+      : []),
   ].filter((item) => item.value > 0); // Only show non-zero expenses;
 
   return (
