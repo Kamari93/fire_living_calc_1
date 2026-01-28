@@ -79,8 +79,8 @@ export default function ExpenseBarChart({ expenses }) {
               typeof e.name === "string" &&
               Number.isFinite(Number(e.amount))
           )
-          .map((expense) => ({
-            name: expense.name,
+          .map((expense, idx) => ({
+            name: expense.label || `Custom ${idx + 1}`,
             value: Number(expense.amount),
           }))
       : []),
