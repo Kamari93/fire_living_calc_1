@@ -67,7 +67,7 @@ export default function ExpensePieChart({ expenses }) {
             }).format(value)
           }
         />
-        <Legend />
+        {/* <Legend /> */}
       </PieChart>
     </div>
   );
