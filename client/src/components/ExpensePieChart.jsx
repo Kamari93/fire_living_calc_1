@@ -44,7 +44,7 @@ export default function ExpensePieChart({ expenses }) {
       <h4 className="text-lg font-semibold mb-2 text-center">
         Monthly Expense Proportions
       </h4>
-      <PieChart width={300} height={250}>
+      <PieChart width={400} height={300}>
         <Pie
           data={data}
           cx={150}
