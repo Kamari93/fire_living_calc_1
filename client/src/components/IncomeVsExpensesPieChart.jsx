@@ -8,40 +8,6 @@ import {
 
 const COLORS = ["#0088FE", "#FF8042"];
 
-// function formatNumber(num) {
-//   return `$${num.toLocaleString()}`;
-// }
-
-// function sumExpenses(expenses) {
-//   if (!expenses) return 0;
-//   let total =
-//     (expenses.rent ?? 0) +
-//     (expenses.groceries ?? 0) +
-//     (expenses.healthcare ?? 0) +
-//     (expenses.childcare ?? 0) +
-//     (expenses.transportation ?? 0) +
-//     (expenses.utilities ?? 0) +
-//     (expenses.discretionary ?? 0);
-
-//   // Sum taxes
-//   if (expenses.taxes) {
-//     total +=
-//       (expenses.taxes.federal ?? 0) +
-//       (expenses.taxes.state ?? 0) +
-//       (expenses.taxes.local ?? 0);
-//   }
-
-//   // Sum custom expenses
-//   if (Array.isArray(expenses.customExpenses)) {
-//     total += expenses.customExpenses.reduce(
-//       (sum, exp) => sum + (exp.amount ?? 0),
-//       0
-//     );
-//   }
-
-//   return total;
-// }
-
 export default function IncomeVsExpensesPieChart({ scenario }) {
   if (!scenario) return null;
 
