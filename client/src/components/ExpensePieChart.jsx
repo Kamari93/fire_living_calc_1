@@ -14,7 +14,7 @@ const COLORS = [
 
 export default function ExpensePieChart({ expenses }) {
   if (!expenses) return null;
-  const totalExpenses = sumExpenses(expenses || {}); // Ensure expenses is defined
+  const totalMonthlyExpenses = sumExpenses(expenses || {}); // Ensure expenses is defined
 
   const data = [
     { name: "Rent", value: expenses.rent ?? 0 },
@@ -73,7 +73,7 @@ export default function ExpensePieChart({ expenses }) {
       </PieChart>
       <div className="text-center mt-2">
         <span className="font-semibold">
-          Total Monthly Expenses: {formatNumber(totalExpenses)}
+          Total Monthly Expenses: {formatNumber(totalMonthlyExpenses)}
         </span>
       </div>
     </div>
