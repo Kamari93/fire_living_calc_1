@@ -42,7 +42,7 @@ export default function ExpensePieChart({ expenses }) {
   return (
     <div className="my-8" width="100%">
       <h4 className="text-lg font-semibold mb-2 text-center">
-        Expense Proportions
+        Monthly Expense Proportions
       </h4>
       <PieChart width={300} height={250}>
         <Pie
