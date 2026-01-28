@@ -454,8 +454,15 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
     }
     const arrayKey = keys[keys.length - 1];
     const updatedArray = [...arr[arrayKey]];
-    updatedArray[idx] = { ...updatedArray[idx], [key]: value };
+    const cleanValue = key === "amount" ? unformatNumber(value) : value;
+    updatedArray[idx] = {
+      ...updatedArray[idx],
+      [key]: cleanValue,
+    };
+
     arr[arrayKey] = updatedArray;
+    // updatedArray[idx] = { ...updatedArray[idx], [key]: value };
+    // arr[arrayKey] = updatedArray;
 
     setForm(updatedForm);
   };
