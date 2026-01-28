@@ -55,7 +55,7 @@ export default function ExpenseBarChartAnnual({ expenses }) {
           )
           .map((expense, idx) => ({
             name: expense.label || `Custom ${idx + 1}`,
-            value: Number(expense.amount),
+            value: monthlyToAnnual(Number(expense.amount)),
           }))
       : []),
   ].filter((item) => item.value > 0); // Only show non-zero expenses;
