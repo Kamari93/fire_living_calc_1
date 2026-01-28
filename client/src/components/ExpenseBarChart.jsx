@@ -25,7 +25,8 @@ export default function ExpenseBarChart({ expenses }) {
       name: expense.name,
       value: expense.amount,
     })),
-  ].filter((item) => item.value > 0); // Only show non-zero expenses;;
+    // ].filter((item) => item.value > 0); // Only show non-zero expenses;;
+  ];
 
   return (
     <div className="my-8">
