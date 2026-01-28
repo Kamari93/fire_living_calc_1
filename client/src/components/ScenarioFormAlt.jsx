@@ -177,16 +177,6 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
     const targetNetWorth = providedTarget || computedTarget || null;
     // const targetNetWorth = resolveTargetNetWorth(scenario);
 
-    // --- 🔥 CALCULATE REALISTIC FI YEAR ---
-    // const realisticFIYear = targetNetWorth
-    //   ? estimateFIYear({
-    //       netWorth: nw,
-    //       annualContribution: annualSurplus,
-    //       target: targetNetWorth,
-    //       annualReturn: Number(form.fireGoal?.investmentReturnRate ?? 0.07),
-    //     })
-    //   : null;
-
     // --- 🔥 CALCULATE PREVIEW FI YEAR ---
     const previewFIYear =
       targetNetWorth && annualSurplus > 0
@@ -205,26 +195,6 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
       targetNetWorth,
       previewFIYear,
     });
-
-    // setTotals({
-    //   expenses: exp,
-    //   assets: ast,
-    //   liabilities: liab,
-    //   netWorth: nw,
-    //   annualSurplus,
-    //   comprehensive,
-    //   targetNetWorth,
-    //   calculatedFIYear: realisticFIYear, // still stored here for backward UI use
-    // });
-
-    // ✅ 2. ALSO store inside form.fireGoal for backend persistence
-    // setForm((prev) => ({
-    //   ...prev,
-    //   fireGoal: {
-    //     ...prev.fireGoal,
-    //     realisticFIYear,
-    //   },
-    // }));
   }, [
     form.expenses,
     form.assets,
@@ -443,28 +413,52 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
     }
   };
 
+  // const handleArrayChange = (fieldPath, idx, key, value) => {
+  //   const keys = fieldPath.split(".");
+  //   let updatedForm = { ...form };
+
+  //   // Traverse to the array
+  //   let arr = updatedForm;
+  //   for (let i = 0; i < keys.length - 1; i++) {
+  //     arr = arr[keys[i]];
+  //   }
+  //   const arrayKey = keys[keys.length - 1];
+  //   const updatedArray = [...arr[arrayKey]];
+  //   const cleanValue = key === "amount" ? unformatNumber(value) : value;
+  //   updatedArray[idx] = {
+  //     ...updatedArray[idx],
+  //     [key]: cleanValue,
+  //   };
+
+  //   arr[arrayKey] = updatedArray;
+  //   // updatedArray[idx] = { ...updatedArray[idx], [key]: value };
+  //   // arr[arrayKey] = updatedArray;
+
+  //   setForm(updatedForm);
+  // };
+
   const handleArrayChange = (fieldPath, idx, key, value) => {
-    const keys = fieldPath.split(".");
-    let updatedForm = { ...form };
-
-    // Traverse to the array
-    let arr = updatedForm;
-    for (let i = 0; i < keys.length - 1; i++) {
-      arr = arr[keys[i]];
-    }
-    const arrayKey = keys[keys.length - 1];
-    const updatedArray = [...arr[arrayKey]];
     const cleanValue = key === "amount" ? unformatNumber(value) : value;
-    updatedArray[idx] = {
-      ...updatedArray[idx],
-      [key]: cleanValue,
-    };
 
-    arr[arrayKey] = updatedArray;
-    // updatedArray[idx] = { ...updatedArray[idx], [key]: value };
-    // arr[arrayKey] = updatedArray;
+    setForm((prev) => {
+      const keys = fieldPath.split(".");
+      const section = keys[0]; // "expenses" or "income"
+      const arrayKey = keys[1]; // "customExpenses" or "incomeSources"
 
-    setForm(updatedForm);
+      const updatedArray = [...prev[section][arrayKey]];
+      updatedArray[idx] = {
+        ...updatedArray[idx],
+        [key]: cleanValue,
+      };
+
+      return {
+        ...prev,
+        [section]: {
+          ...prev[section], // ✅ NEW object reference
+          [arrayKey]: updatedArray,
+        },
+      };
+    });
   };
 
   const addIncomeSource = () => {
