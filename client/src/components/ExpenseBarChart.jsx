@@ -76,7 +76,7 @@ export default function ExpenseBarChart({ expenses }) {
           .filter(
             (e) =>
               e &&
-              typeof e.name === "string" &&
+              typeof e.label === "string" &&
               Number.isFinite(Number(e.amount))
           )
           .map((expense, idx) => ({
