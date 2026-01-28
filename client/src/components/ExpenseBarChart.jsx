@@ -84,7 +84,7 @@ export default function ExpenseBarChart({ expenses }) {
             value: Number(expense.amount),
           }))
       : []),
-  ];
+  ].filter((item) => item.value > 0); // Only show non-zero expenses;
 
   const safeData = data.filter(
     (d) => d && typeof d.name === "string" && Number.isFinite(d.value)
