@@ -925,7 +925,7 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
             Rent
             <span
               data-tooltip-id="info"
-              data-tooltip-content="Monthly or annual rent payment"
+              data-tooltip-content="Monthly rent payment"
               className="ml-1 cursor-pointer text-blue-500"
             >
               ⓘ
@@ -944,7 +944,7 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
             Groceries
             <span
               data-tooltip-id="info"
-              data-tooltip-content="Monthly or annual grocery expenses"
+              data-tooltip-content="Monthly grocery expenses"
               className="ml-1 cursor-pointer text-blue-500"
             >
               ⓘ
