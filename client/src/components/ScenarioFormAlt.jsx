@@ -547,7 +547,7 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
         const created = await api.post("/scenarios", cleaned);
         onScenarioSaved(created.data);
       }
-      onScenarioSaved();
+      // onScenarioSaved();
       // Reset form after save
       setForm({
         name: "",
