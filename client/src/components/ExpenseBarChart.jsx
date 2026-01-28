@@ -21,6 +21,10 @@ export default function ExpenseBarChart({ expenses }) {
     { name: "Utilities", value: expenses.utilities ?? 0 },
     { name: "Discretionary", value: expenses.discretionary ?? 0 },
     // Add custom expenses if needed
+    ...(expenses.customExpenses || []).map((expense) => ({
+      name: expense.name,
+      value: expense.amount,
+    })),
   ].filter((item) => item.value > 0); // Only show non-zero expenses;;
 
   return (
