@@ -60,7 +60,7 @@ export default function ExpenseBarChart({ expenses, compact = false }) {
   }
 
   const BAR_HEIGHT = 36;
-  const chartHeight = Math.max(data.length * BAR_HEIGHT, 250);
+  // const chartHeight = Math.max(data.length * BAR_HEIGHT, 250);
 
   return (
     <div className="my-6 p-4 bg-white rounded-lg shadow">
@@ -68,7 +68,7 @@ export default function ExpenseBarChart({ expenses, compact = false }) {
         Expense Breakdown
       </h4>
 
-      <ResponsiveContainer width="100%" height={chartHeight}>
+      <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={data}
           layout={layout}
