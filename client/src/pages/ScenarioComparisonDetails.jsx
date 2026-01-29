@@ -263,7 +263,10 @@ export default function ScenarioComparisonDetails() {
             const chart = chartOptions.find((opt) => opt.key === selectedChart);
             const latestHistory = getLatestNetWorthSnapshot(snap);
             return (
-              <div key={idx} className="p-4 bg-gray-50 rounded shadow">
+              <div
+                key={idx}
+                className="p-6 bg-gray-50 rounded shadow overflow-visible"
+              >
                 <h3 className="text-md font-bold mb-2 text-center">
                   {snap.name}
                 </h3>
