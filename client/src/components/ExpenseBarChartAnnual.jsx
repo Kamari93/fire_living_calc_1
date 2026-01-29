@@ -95,7 +95,7 @@ export default function ExpenseBarChartAnnual({ expenses, compact = false }) {
           )}
 
           <Tooltip formatter={currencyFormatter} />
-          <Bar dataKey="value" fill="#6366f1" />
+          <Bar dataKey="value" fill="#0ea5e9" />
         </BarChart>
         {/* <BarChart
           data={data}
