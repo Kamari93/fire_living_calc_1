@@ -80,7 +80,12 @@ export default function ExpenseBarChart({ expenses }) {
           />
           <YAxis type="category" dataKey="name" width={140} />
           <Tooltip formatter={currencyFormatter} />
-          <Bar dataKey="value" fill="#6366f1" radius={[4, 4, 4, 4]} />
+          <Bar
+            dataKey="value"
+            fill="#6366f1"
+            radius={[4, 4, 4, 4]}
+            minPointSize={6}
+          />
         </BarChart>
       </ResponsiveContainer>
     </div>
