@@ -60,7 +60,7 @@ export default function ExpenseBarChart({ expenses, compact = false }) {
   }
 
   const BAR_HEIGHT = 36;
-  // const chartHeight = Math.max(data.length * BAR_HEIGHT, 250);
+  const chartHeight = Math.max(data.length * BAR_HEIGHT, 250);
 
   return (
     <div className="my-6 p-4 bg-white rounded-lg shadow">
@@ -68,36 +68,36 @@ export default function ExpenseBarChart({ expenses, compact = false }) {
         Expense Breakdown
       </h4>
 
-      {/* <ResponsiveContainer width="100%" height={chartHeight}> */}
-      <BarChart
-        data={data}
-        layout={layout}
-        // margin={
-        //   compact
-        //     ? { top: 20, right: 10, left: 10, bottom: 40 }
-        //     : { top: 10, right: 30, left: 20, bottom: 10 }
-        // }
-      >
-        {compact ? (
-          <>
-            <XAxis dataKey="name" tick={{ fontSize: 11 }} />
-            <YAxis tickFormatter={currencyFormatter} />
-          </>
-        ) : (
-          <>
-            <XAxis
-              type="number"
-              domain={[0, "dataMax"]}
-              tickFormatter={currencyFormatter}
-            />
-            <YAxis type="category" dataKey="name" width={140} />
-          </>
-        )}
+      <ResponsiveContainer width="100%" height={chartHeight}>
+        <BarChart
+          data={data}
+          layout={layout}
+          // margin={
+          //   compact
+          //     ? { top: 20, right: 10, left: 10, bottom: 40 }
+          //     : { top: 10, right: 30, left: 20, bottom: 10 }
+          // }
+        >
+          {compact ? (
+            <>
+              <XAxis dataKey="name" tick={{ fontSize: 11 }} />
+              <YAxis tickFormatter={currencyFormatter} />
+            </>
+          ) : (
+            <>
+              <XAxis
+                type="number"
+                domain={[0, "dataMax"]}
+                tickFormatter={currencyFormatter}
+              />
+              <YAxis type="category" dataKey="name" width={140} />
+            </>
+          )}
 
-        <Tooltip formatter={currencyFormatter} />
-        <Bar dataKey="value" fill="#6366f1" />
-      </BarChart>
-      {/* </ResponsiveContainer> */}
+          <Tooltip formatter={currencyFormatter} />
+          <Bar dataKey="value" fill="#6366f1" />
+        </BarChart>
+      </ResponsiveContainer>
       {/* <ResponsiveContainer width="100%" height={chartHeight}>
         <BarChart
           data={data}
