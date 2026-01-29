@@ -65,7 +65,7 @@ export default function ExpenseBarChart({ expenses, compact = false }) {
   return (
     <div className="my-6 p-4 bg-white rounded-lg shadow">
       <h4 className="text-lg font-semibold mb-4 text-center">
-        Expense Breakdown
+        Monthly Expenses Breakdown
       </h4>
 
       <ResponsiveContainer width="100%" height={chartHeight}>
