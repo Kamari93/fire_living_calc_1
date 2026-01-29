@@ -9,21 +9,21 @@ import {
 } from "recharts";
 import { monthlyToAnnual } from "../services/financeHelpers";
 
-// const currencyFormatter = (value) =>
-//   new Intl.NumberFormat("en-US", {
-//     style: "currency",
-//     currency: "USD",
-//     maximumFractionDigits: 0,
-//   }).format(value);
+const currencyFormatter = (value) =>
+  new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  }).format(value);
 
-function currencyFormatter(n) {
-  if (n >= 1_000_000) {
-    // Number() removes unnecessary trailing zeros (e.g., 2.0 -> 2)
-    return `$${Number((n / 1_000_000).toFixed(1))}M`;
-  }
-  if (n >= 1_000) return `$${(n / 1_000).toFixed(0)}k`;
-  return `$${n}`;
-}
+// function currencyFormatter(n) {
+//   if (n >= 1_000_000) {
+//     // Number() removes unnecessary trailing zeros (e.g., 2.0 -> 2)
+//     return `$${Number((n / 1_000_000).toFixed(1))}M`;
+//   }
+//   if (n >= 1_000) return `$${(n / 1_000).toFixed(0)}k`;
+//   return `$${n}`;
+// }
 
 export default function ExpenseBarChartAnnual({ expenses, compact = false }) {
   if (!expenses) return null;
