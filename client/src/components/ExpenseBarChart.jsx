@@ -72,7 +72,11 @@ export default function ExpenseBarChart({ expenses }) {
           layout="vertical"
           margin={{ top: 10, right: 30, left: 20, bottom: 10 }}
         >
-          <XAxis type="number" tickFormatter={currencyFormatter} />
+          <XAxis
+            type="number"
+            domain={[0, "dataMax"]}
+            tickFormatter={currencyFormatter}
+          />
           <YAxis type="category" dataKey="name" width={140} />
           <Tooltip formatter={currencyFormatter} />
           <Bar dataKey="value" fill="#6366f1" radius={[4, 4, 4, 4]} />
