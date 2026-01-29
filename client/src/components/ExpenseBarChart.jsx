@@ -68,7 +68,7 @@ export default function ExpenseBarChart({ expenses, compact = false }) {
         Expense Breakdown
       </h4>
 
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="100%" height={350}>
         <BarChart
           data={data}
           layout={layout}
