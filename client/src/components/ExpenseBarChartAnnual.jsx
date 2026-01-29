@@ -16,14 +16,14 @@ const currencyFormatter = (value) =>
     maximumFractionDigits: 0,
   }).format(value);
 
-// function currencyFormatter(n) {
-//   if (n >= 1_000_000) {
-//     // Number() removes unnecessary trailing zeros (e.g., 2.0 -> 2)
-//     return `$${Number((n / 1_000_000).toFixed(1))}M`;
-//   }
-//   if (n >= 1_000) return `$${(n / 1_000).toFixed(0)}k`;
-//   return `$${n}`;
-// }
+function formatCurrencyShort(n) {
+  if (n >= 1_000_000) {
+    // Number() removes unnecessary trailing zeros (e.g., 2.0 -> 2)
+    return `$${Number((n / 1_000_000).toFixed(1))}M`;
+  }
+  if (n >= 1_000) return `$${(n / 1_000).toFixed(0)}k`;
+  return `$${n}`;
+}
 
 export default function ExpenseBarChartAnnual({ expenses, compact = false }) {
   if (!expenses) return null;
@@ -72,7 +72,7 @@ export default function ExpenseBarChartAnnual({ expenses, compact = false }) {
   const chartHeight = Math.max(data.length * BAR_HEIGHT, 250);
 
   return (
-    <div className="my-6 p-4 bg-white rounded-lg shadow">
+    <div className="my-6 p-4 bg-white rounded-lg shadow w-full max-w-full mx-auto">
       <h4 className="text-lg font-semibold mb-4 text-center">
         Annual Expense Breakdown
       </h4>
@@ -90,21 +90,21 @@ export default function ExpenseBarChartAnnual({ expenses, compact = false }) {
           {compact ? (
             <>
               <XAxis dataKey="name" tick={{ fontSize: 11 }} />
-              <YAxis tickFormatter={currencyFormatter} />
+              <YAxis tickFormatter={formatCurrencyShort} />
             </>
           ) : (
             <>
               <XAxis
                 type="number"
                 domain={[0, "dataMax"]}
-                tickFormatter={currencyFormatter}
+                tickFormatter={formatCurrencyShort}
               />
               <YAxis type="category" dataKey="name" width={140} />
             </>
           )}
 
           <Tooltip formatter={currencyFormatter} />
-          <Bar dataKey="value" fill="#0ea5e9" />
+          <Bar dataKey="value" fill="#0ea5e9" radius={[4, 4, 4, 4]} />
         </BarChart>
         {/* <BarChart
           data={data}

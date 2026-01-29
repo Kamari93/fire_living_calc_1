@@ -63,7 +63,7 @@ export default function ExpenseBarChart({ expenses, compact = false }) {
   const chartHeight = Math.max(data.length * BAR_HEIGHT, 250);
 
   return (
-    <div className="my-6 p-4 bg-white rounded-lg shadow">
+    <div className="my-6 p-4 bg-white rounded-lg shadow w-full max-w-full mx-auto">
       <h4 className="text-lg font-semibold mb-4 text-center">
         Monthly Expenses Breakdown
       </h4>
@@ -95,7 +95,7 @@ export default function ExpenseBarChart({ expenses, compact = false }) {
           )}
 
           <Tooltip formatter={currencyFormatter} />
-          <Bar dataKey="value" fill="#6366f1" />
+          <Bar dataKey="value" fill="#6366f1" radius={[4, 4, 4, 4]} />
         </BarChart>
       </ResponsiveContainer>
       {/* <ResponsiveContainer width="100%" height={chartHeight}>
