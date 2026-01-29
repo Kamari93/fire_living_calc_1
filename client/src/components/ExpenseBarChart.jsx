@@ -99,7 +99,7 @@ export default function ExpenseBarChart({ expenses, compact = false }) {
           )}
 
           <Tooltip formatter={currencyFormatter} />
-          <Bar dataKey="value" fill="#6366f1" barSize={10} />
+          <Bar dataKey="value" fill="#6366f1" barSize={50} />
         </BarChart>
       </ResponsiveContainer>
       {/* <ResponsiveContainer width="100%" height={chartHeight}>
