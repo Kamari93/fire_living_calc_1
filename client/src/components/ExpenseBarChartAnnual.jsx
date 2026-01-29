@@ -71,7 +71,7 @@ export default function ExpenseBarChartAnnual({ expenses }) {
         <BarChart
           data={data}
           layout="vertical"
-          margin={{ top: 10, right: 30, left: 40, bottom: 10 }}
+          margin={{ top: 10, right: 30, left: 20, bottom: 10 }}
         >
           <XAxis type="number" tickFormatter={currencyFormatter} />
           <YAxis type="category" dataKey="name" width={140} />
