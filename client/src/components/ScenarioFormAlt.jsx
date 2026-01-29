@@ -961,6 +961,87 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
             className="w-full px-3 py-2 border rounded"
           />
 
+          <label htmlFor="expenses.healthcare" className="flex items-center">
+            Healthcare
+            <span
+              data-tooltip-id="info"
+              data-tooltip-content="Monthly healthcare expenses"
+              className="ml-1 cursor-pointer text-blue-500"
+            >
+              ⓘ
+            </span>
+          </label>
+          <input
+            name="expenses.healthcare"
+            value={formatNumber(form.expenses.healthcare ?? "")}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            placeholder="Healthcare"
+            type="text"
+            className="w-full px-3 py-2 border rounded"
+          />
+          {/* Add more predefined expense fields as needed */}
+          <label htmlFor="expenses.childcare" className="flex items-center">
+            Childcare
+            <span
+              data-tooltip-id="info"
+              data-tooltip-content="Monthly childcare expenses"
+              className="ml-1 cursor-pointer text-blue-500"
+            >
+              ⓘ
+            </span>
+          </label>
+          <input
+            name="expenses.childcare"
+            value={formatNumber(form.expenses.childcare ?? "")}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            placeholder="Childcare"
+            type="text"
+            className="w-full px-3 py-2 border rounded"
+          />
+          <label
+            htmlFor="expenses.transportation"
+            className="flex items-center"
+          >
+            Transportation
+            <span
+              data-tooltip-id="info"
+              data-tooltip-content="Monthly transportation expenses"
+              className="ml-1 cursor-pointer text-blue-500"
+            >
+              ⓘ
+            </span>
+          </label>
+          <input
+            name="expenses.transportation"
+            value={formatNumber(form.expenses.transportation ?? "")}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            placeholder="Transportation"
+            type="text"
+            className="w-full px-3 py-2 border rounded"
+          />
+          <label htmlFor="expenses.utilities" className="flex items-center">
+            Utilities
+            <span
+              data-tooltip-id="info"
+              data-tooltip-content="Monthly utilities expenses"
+              className="ml-1 cursor-pointer text-blue-500"
+            >
+              ⓘ
+            </span>
+          </label>
+          <input
+            name="expenses.utilities"
+            value={formatNumber(form.expenses.utilities ?? "")}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            placeholder="Utilities"
+            type="text"
+            className="w-full px-3 py-2 border rounded"
+          />
+
           <div>
             <h4 className="font-semibold">
               Custom Expenses
