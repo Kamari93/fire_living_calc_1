@@ -270,7 +270,7 @@ export default function ScenarioComparisonDetails() {
                 <h4 className="text-md font-bold mb-2 text-center">
                   {snap.location?.city}, {snap.location?.state}
                 </h4>
-                <div className="w-full overflow-visible">
+                <div className="w-full overflow-visible flex justify-center items-center">
                   {chart.render(snap)}
                 </div>
 
