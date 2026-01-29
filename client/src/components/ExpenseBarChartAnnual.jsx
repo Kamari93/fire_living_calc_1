@@ -72,11 +72,11 @@ export default function ExpenseBarChartAnnual({ expenses, compact = false }) {
         <BarChart
           data={data}
           layout={layout}
-          margin={
-            compact
-              ? { top: 20, right: 10, left: 10, bottom: 40 }
-              : { top: 10, right: 30, left: 20, bottom: 10 }
-          }
+          // margin={
+          //   compact
+          //     ? { top: 20, right: 10, left: 10, bottom: 40 }
+          //     : { top: 10, right: 30, left: 20, bottom: 10 }
+          // }
         >
           {compact ? (
             <>
