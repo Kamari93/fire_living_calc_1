@@ -41,7 +41,9 @@ const chartOptions = [
   {
     key: "expenseBarAnnual",
     label: "Expenses (Bar Annual)",
-    render: (snap) => <ExpenseBarChartAnnual expenses={snap.expenses} />,
+    render: (snap) => (
+      <ExpenseBarChartAnnual expenses={snap.expenses} compact />
+    ),
   },
   {
     key: "incomeVsExpenses",
