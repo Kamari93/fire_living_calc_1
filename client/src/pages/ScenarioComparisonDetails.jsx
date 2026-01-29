@@ -275,9 +275,7 @@ export default function ScenarioComparisonDetails() {
                 <h4 className="text-md font-bold mb-2 text-center">
                   {snap.location?.city}, {snap.location?.state}
                 </h4>
-                <div className="flex justify-center items-center w-[400px] h-[400px] max-w-full">
-                  {chart.render(snap)}
-                </div>
+                <div className="w-full">{chart.render(snap)}</div>
 
                 {/* Snapshot summary: total tax, take-home, net annual */}
                 <div className="mt-3 text-sm text-gray-700 space-y-1">
