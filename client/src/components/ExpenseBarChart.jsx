@@ -15,8 +15,10 @@ const currencyFormatter = (value) =>
     maximumFractionDigits: 0,
   }).format(value);
 
-export default function ExpenseBarChart({ expenses }) {
+export default function ExpenseBarChart({ expenses, compact = false }) {
   if (!expenses) return null;
+
+  const layout = compact ? "horizontal" : "vertical";
 
   const baseExpenses = [
     ["Rent", expenses.rent],
@@ -69,13 +71,43 @@ export default function ExpenseBarChart({ expenses }) {
       <ResponsiveContainer width="100%" height={chartHeight}>
         <BarChart
           data={data}
+          layout={layout}
+          margin={
+            compact
+              ? { top: 20, right: 10, left: 10, bottom: 40 }
+              : { top: 10, right: 30, left: 20, bottom: 10 }
+          }
+        >
+          {compact ? (
+            <>
+              <XAxis dataKey="name" tick={{ fontSize: 11 }} />
+              <YAxis tickFormatter={currencyFormatter} />
+            </>
+          ) : (
+            <>
+              <XAxis
+                type="number"
+                domain={[0, "dataMax"]}
+                tickFormatter={currencyFormatter}
+              />
+              <YAxis type="category" dataKey="name" width={140} />
+            </>
+          )}
+
+          <Tooltip formatter={currencyFormatter} />
+          <Bar dataKey="value" fill="#6366f1" />
+        </BarChart>
+      </ResponsiveContainer>
+      {/* <ResponsiveContainer width="100%" height={chartHeight}>
+        <BarChart
+          data={data}
           layout="vertical"
           margin={{ top: 10, right: 30, left: 20, bottom: 10 }}
         >
           <XAxis
             type="number"
             domain={[0, "dataMax"]}
-            padding={{ left: 20, right: 20 }}
+            // padding={{ left: 20, right: 20 }}
             tickFormatter={currencyFormatter}
           />
           <YAxis type="category" dataKey="name" width={140} />
@@ -87,7 +119,7 @@ export default function ExpenseBarChart({ expenses }) {
             minPointSize={6}
           />
         </BarChart>
-      </ResponsiveContainer>
+      </ResponsiveContainer> */}
     </div>
   );
 }
