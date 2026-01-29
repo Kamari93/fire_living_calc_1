@@ -72,11 +72,11 @@ export default function ExpenseBarChart({ expenses, compact = false }) {
         <BarChart
           data={data}
           layout={layout}
-          margin={
-            compact
-              ? { top: 20, right: 10, left: 10, bottom: 40 }
-              : { top: 10, right: 30, left: 20, bottom: 10 }
-          }
+          // margin={
+          //   compact
+          //     ? { top: 20, right: 10, left: 10, bottom: 40 }
+          //     : { top: 10, right: 30, left: 20, bottom: 10 }
+          // }
         >
           {compact ? (
             <>
@@ -87,7 +87,7 @@ export default function ExpenseBarChart({ expenses, compact = false }) {
             <>
               <XAxis
                 type="number"
-                domain={[0, "dataMax * 12"]}
+                domain={[0, "dataMax"]}
                 tickFormatter={currencyFormatter}
               />
               <YAxis type="category" dataKey="name" width={140} />
