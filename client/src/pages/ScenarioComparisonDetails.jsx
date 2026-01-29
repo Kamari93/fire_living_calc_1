@@ -172,15 +172,6 @@ export default function ScenarioComparisonDetails() {
           <button
             className="bg-green-500 text-white px-3 py-1 rounded mr-2"
             onClick={async () => {
-              // const token = localStorage.getItem("token");
-              // const res = await axios.put(
-              //   `https://firelivingcalc1server.vercel.app/api/scenario-comparisons/${comparison._id}`,
-              //   { title: editTitle, notes: editNotes },
-              //   {
-              //     withCredentials: true,
-              //     headers: { Authorization: `Bearer ${token}` },
-              //   }
-              // );
               const res = await api.put(
                 `scenario-comparisons/${comparison._id}`,
                 { title: editTitle, notes: editNotes }
