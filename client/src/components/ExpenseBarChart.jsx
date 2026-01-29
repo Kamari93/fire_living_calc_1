@@ -80,7 +80,11 @@ export default function ExpenseBarChart({ expenses, compact = false }) {
         >
           {compact ? (
             <>
-              <XAxis dataKey="name" tick={{ fontSize: 11 }} />
+              <XAxis
+                dataKey="name"
+                tick={{ fontSize: 11 }}
+                domain={[0, "dataMax"]}
+              />
               <YAxis tickFormatter={currencyFormatter} />
             </>
           ) : (
