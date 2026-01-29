@@ -16,9 +16,10 @@ const currencyFormatter = (value) =>
     maximumFractionDigits: 0,
   }).format(value);
 
-export default function ExpenseBarChartAnnual({ expenses }) {
+export default function ExpenseBarChartAnnual({ expenses, compact = false }) {
   if (!expenses) return null;
 
+  const layout = compact ? "horizontal" : "vertical";
   const baseExpenses = [
     ["Rent", expenses.rent],
     ["Groceries", expenses.groceries],
@@ -70,6 +71,34 @@ export default function ExpenseBarChartAnnual({ expenses }) {
       <ResponsiveContainer width="100%" height={chartHeight}>
         <BarChart
           data={data}
+          layout={layout}
+          margin={
+            compact
+              ? { top: 20, right: 10, left: 10, bottom: 40 }
+              : { top: 10, right: 30, left: 20, bottom: 10 }
+          }
+        >
+          {compact ? (
+            <>
+              <XAxis dataKey="name" tick={{ fontSize: 11 }} />
+              <YAxis tickFormatter={currencyFormatter} />
+            </>
+          ) : (
+            <>
+              <XAxis
+                type="number"
+                domain={[0, "dataMax"]}
+                tickFormatter={currencyFormatter}
+              />
+              <YAxis type="category" dataKey="name" width={140} />
+            </>
+          )}
+
+          <Tooltip formatter={currencyFormatter} />
+          <Bar dataKey="value" fill="#6366f1" />
+        </BarChart>
+        {/* <BarChart
+          data={data}
           layout="vertical"
           margin={{ top: 10, right: 30, left: 20, bottom: 10 }}
         >
@@ -77,7 +106,7 @@ export default function ExpenseBarChartAnnual({ expenses }) {
           <YAxis type="category" dataKey="name" width={140} />
           <Tooltip formatter={currencyFormatter} />
           <Bar dataKey="value" fill="#0ea5e9" radius={[4, 4, 4, 4]} />
-        </BarChart>
+        </BarChart> */}
       </ResponsiveContainer>
     </div>
   );
