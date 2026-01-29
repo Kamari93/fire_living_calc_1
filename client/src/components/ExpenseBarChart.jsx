@@ -87,7 +87,7 @@ export default function ExpenseBarChart({ expenses, compact = false }) {
             <>
               <XAxis
                 type="number"
-                domain={[0, "dataMax"]}
+                domain={[0, "dataMax * 12"]}
                 tickFormatter={currencyFormatter}
               />
               <YAxis type="category" dataKey="name" width={140} />
