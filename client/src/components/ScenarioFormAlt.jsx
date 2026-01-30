@@ -918,8 +918,26 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
       {/* Step 3: Expenses */}
       {step === 3 && (
         <div className="space-y-4 h-[300px] overflow-y-auto">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold mb-4">Expenses</h2>
+          <div className="flex items-center justify-center">
+            <h2 className="text-2xl font-bold mb-4 text-center">
+              Expenses{" "}
+              <InfoPopover label="Expenses">
+                {/* <CostOfLivingCalculator /> */}
+                <div className="mb-1 font-medium">Helpful Resources:</div>
+                <ul className="list-disc list-inside space-y-1">
+                  <li>
+                    <a
+                      href="https://www.payscale.com/cost-of-living-calculator"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 underline"
+                    >
+                      Cost of Living Calculators
+                    </a>
+                  </li>
+                </ul>
+              </InfoPopover>
+            </h2>
           </div>
 
           <label htmlFor="expenses.rent" className="flex items-center">
