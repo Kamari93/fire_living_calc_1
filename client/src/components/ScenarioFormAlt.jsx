@@ -1163,6 +1163,71 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
             className="w-full px-3 py-2 border rounded"
           />
           {/* Add more asset fields as needed */}
+          <label htmlFor="assets.investments" className="flex items-center">
+            Investments
+            <span
+              data-tooltip-id="info"
+              data-tooltip-content="Total value of investments"
+              className="ml-1 cursor-pointer text-blue-500"
+            >
+              {" "}
+              ⓘ
+            </span>
+          </label>
+          <input
+            name="assets.investments"
+            // value={form.assets.investments}
+            value={formatNumber(form.assets.investments ?? "")}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            placeholder="Investments"
+            // type="number"
+            type="text"
+            className="w-full px-3 py-2 border rounded"
+          />
+          <label htmlFor="assets.realEstate" className="flex items-center">
+            Real Estate
+            <span
+              data-tooltip-id="info"
+              data-tooltip-content="Total value of real estate holdings"
+              className="ml-1 cursor-pointer text-blue-500"
+            >
+              ⓘ
+            </span>
+          </label>
+          <input
+            name="assets.realEstate"
+            // value={form.assets.realEstate}
+            value={formatNumber(form.assets.realEstate ?? "")}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            placeholder="Real Estate"
+            // type="number"
+            type="text"
+            className="w-full px-3 py-2 border rounded"
+          />
+          <label htmlFor="assets.otherAssets" className="flex items-center">
+            Other Assets
+            <span
+              data-tooltip-id="info"
+              data-tooltip-content="Value of other assets"
+              className="ml-1 cursor-pointer text-blue-500"
+            >
+              ⓘ
+            </span>
+          </label>
+          <input
+            name="assets.otherAssets"
+            // value={form.assets.otherAssets}
+            value={formatNumber(form.assets.otherAssets ?? "")}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            placeholder="Other Assets"
+            // type="number"
+            type="text"
+            className="w-full px-3 py-2 border rounded"
+          />
+          {/* Add more asset fields as needed */}
           <label
             htmlFor="liabilities.studentLoans"
             className="flex items-center"
@@ -1183,6 +1248,95 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
             onChange={handleChange}
             onBlur={handleBlur}
             placeholder="Student Loans"
+            // type="number"
+            type="text"
+            className="w-full px-3 py-2 border rounded"
+          />
+          <label htmlFor="liabilities.mortgage" className="flex items-center">
+            Mortgage
+            <span
+              data-tooltip-id="info"
+              data-tooltip-content="Total mortgage debt"
+              className="ml-1 cursor-pointer text-blue-500"
+            >
+              ⓘ
+            </span>
+          </label>
+          <input
+            name="liabilities.mortgage"
+            // value={form.liabilities.mortgage}
+            value={formatNumber(form.liabilities.mortgage ?? "")}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            placeholder="Mortgage"
+            // type="number"
+            type="text"
+            className="w-full px-3 py-2 border rounded"
+          />
+          <label htmlFor="liabilities.carLoan" className="flex items-center">
+            Car Loan
+            <span
+              data-tooltip-id="info"
+              data-tooltip-content="Total car loan debt"
+              className="ml-1 cursor-pointer text-blue-500"
+            >
+              {" "}
+              ⓘ
+            </span>
+          </label>
+          <input
+            name="liabilities.carLoan"
+            // value={form.liabilities.carLoan}
+            value={formatNumber(form.liabilities.carLoan ?? "")}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            placeholder="Car Loan"
+            // type="number"
+            type="text"
+            className="w-full px-3 py-2 border rounded"
+          />
+          <label
+            htmlFor="liabilities.creditCardDebt"
+            className="flex items-center"
+          >
+            Credit Card Debt
+            <span
+              data-tooltip-id="info"
+              data-tooltip-content="Total credit card debt"
+              className="ml-1 cursor-pointer text-blue-500"
+            >
+              {" "}
+              ⓘ
+            </span>
+          </label>
+          <input
+            name="liabilities.creditCardDebt"
+            // value={form.liabilities.creditCardDebt}
+            value={formatNumber(form.liabilities.creditCardDebt ?? "")}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            placeholder="Credit Card Debt"
+            // type="number"
+            type="text"
+            className="w-full px-3 py-2 border rounded"
+          />
+          <label htmlFor="liabilities.otherDebts" className="flex items-center">
+            Other Debts
+            <span
+              data-tooltip-id="info"
+              data-tooltip-content="Total of other debts"
+              className="ml-1 cursor-pointer text-blue-500"
+            >
+              ⓘ
+            </span>
+          </label>
+          <input
+            name="liabilities.otherDebts"
+            // value={form.liabilities.otherDebts}
+            value={formatNumber(form.liabilities.otherDebts ?? "")}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            placeholder="Other Debts"
             // type="number"
             type="text"
             className="w-full px-3 py-2 border rounded"

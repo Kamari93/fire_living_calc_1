@@ -243,11 +243,20 @@ export default function ViewScenario() {
           }`,
         },
         {
+          label: "Investments",
+          // value: `$${scenario.assets?.investments ?? "---"}`,
+          value: `$${formatNumber(scenario.assets?.investments) || "---"}`,
+        },
+        {
+          label: "Real Estate",
+          // value: `$${scenario.assets?.realEstate ?? "---"}`,
+          value: `$${formatNumber(scenario.assets?.realEstate) || "---"}`,
+        },
+        {
           label: "Other Assets",
           // value: `$${scenario.assets?.otherAssets ?? "---"}`,
           value: `$${formatNumber(scenario.assets?.otherAssets) || "---"}`,
         },
-        { label: "Investments", value: `$${scenario.investments ?? "---"}` },
       ],
     },
     {
