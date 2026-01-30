@@ -919,7 +919,7 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
       {step === 3 && (
         <div className="space-y-4 h-[300px] overflow-y-auto">
           <div className="flex items-center justify-center">
-            <h2 className="text-2xl font-bold mb-4 text-center">
+            <h2 className="text-2xl font-bold mb-0 text-center">
               Expenses{" "}
               <InfoPopover label="Expenses">
                 {/* <CostOfLivingCalculator /> */}
