@@ -923,7 +923,7 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
               Expenses{" "}
               <InfoPopover label="Expenses">
                 {/* <CostOfLivingCalculator /> */}
-                <div className="mb-1 font-medium">Helpful Resources:</div>
+                <div className="mb-1 font-medium">Helpful Resource:</div>
                 <ul className="list-disc list-inside space-y-1">
                   <li>
                     <a
@@ -932,7 +932,7 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
                       rel="noopener noreferrer"
                       className="text-blue-600 underline"
                     >
-                      Cost of Living Calculators
+                      Payscale's Cost of Living Calculator for expeneses
                     </a>
                   </li>
                 </ul>
