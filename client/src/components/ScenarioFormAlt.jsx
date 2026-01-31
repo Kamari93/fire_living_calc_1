@@ -1391,6 +1391,7 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
               <InfoPopover label="Savings Rate">
                 <p className="text-gray-700 text-sm leading-snug">
                   The percentage of your annual income that you save each year.
+                  calculated as (Annual Surplus / Net Annual Income) * 100.
                 </p>
               </InfoPopover>
             </div>
