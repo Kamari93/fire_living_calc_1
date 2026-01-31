@@ -298,7 +298,7 @@ export default function ViewScenario() {
       fields: [
         {
           label: "Savings Rate",
-          value: `${scenario.savingsRate ?? "---"}%`,
+          value: `${(scenario.savingsRate * 100).toFixed(0) ?? "---"}%`,
         },
       ],
     },

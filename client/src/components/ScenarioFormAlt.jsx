@@ -1384,6 +1384,21 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
               </div>
             ))}
           </div>
+          {/*} Display savings rate as a percentage with same design to the other metrics */}
+          <div className="mt-3 px-3 py-2 bg-green-50 border border-green-200 rounded text-sm flex justify-between items-center">
+            <div className="flex items-center">
+              <span className="font-medium text-green-800">Savings Rate</span>
+              <InfoPopover label="Savings Rate">
+                <p className="text-gray-700 text-sm leading-snug">
+                  The percentage of your annual income that you save each year.
+                </p>
+              </InfoPopover>
+            </div>
+            <span className="font-semibold text-green-900">
+              {/* {formatNumber(form.savingsRate * 100)}% */}
+              {formatNumber(Math.round(form.savingsRate * 100))}%
+            </span>
+          </div>
           {/* Recommended combined metric with tooltip */}
           <div className="mt-3 px-3 py-2 bg-blue-50 border border-blue-200 rounded text-sm flex justify-between items-center">
             <div className="flex items-center">

@@ -11,6 +11,7 @@ const {
   computeNetAnnual,
   computeAnnualSurplus,
   computeAnnualExpenses,
+  computeSavingsRate,
   computeNetWorth,
 } = require("../utils/financeHelpers");
 
@@ -44,10 +45,15 @@ router.post("/", auth, async (req, res) => {
     );
     const annualExpenses = computeAnnualExpenses(req.body.expenses);
     const annualSurplus = computeAnnualSurplus(netAnnual, annualExpenses);
+    const savingsRate = computeSavingsRate({
+      netAnnual,
+      annualExpenses,
+    });
 
     const scenario = new Scenario({
       ...req.body,
       user: req.user._id,
+      savingsRate,
       fireGoal: {
         ...req.body.fireGoal,
         estimatedFIYear: calculation.estimatedFIYear,
@@ -140,15 +146,11 @@ router.put("/:id", auth, async (req, res) => {
     );
     const annualExpenses = computeAnnualExpenses(merged.expenses);
     const annualSurplus = computeAnnualSurplus(netAnnual, annualExpenses);
-    // const annualSurplus = computeAnnualSurplus(
-    //   computeNetAnnual(
-    //     merged.income?.takeHome,
-    //     merged.income?.additionalIncome
-    //   ),
-    //   merged.income?.additionalIncome,
-    //   // merged.expenses
-    //   merged.netWorthHistory?.annualExpenses || merged.expenses
-    // );
+    const savingsRate = computeSavingsRate({
+      netAnnual,
+      annualExpenses,
+    });
+    merged.savingsRate = savingsRate;
     merged.netWorthHistory.push({
       year: new Date().getFullYear(),
       netWorth: currentNetWorth,
