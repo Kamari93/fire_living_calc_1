@@ -124,10 +124,10 @@ router.put("/:id", auth, async (req, res) => {
     }
 
     // Delete related AIInteractions on update
-    await AIInteraction.deleteMany({
-      scenarioId: req.params.id,
-      userId: req.user._id,
-    });
+    // await AIInteraction.deleteMany({
+    //   scenarioId: req.params.id,
+    //   userId: req.user._id,
+    // });
 
     // Merge existing + incoming changes
     const merged = {
