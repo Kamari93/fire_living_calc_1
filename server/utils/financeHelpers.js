@@ -50,8 +50,17 @@ function computeNetWorth(assets = {}, liabilities = {}) {
 }
 
 function computeAnnualSurplus(netAnnual = 0, annualExpenses = 0) {
+  // if (typeof annualExpenses !== "number") {
+  //   throw new Error("computeAnnualSurplus expects annualExpenses as a number");
+  // }
   if (typeof annualExpenses !== "number") {
-    throw new Error("computeAnnualSurplus expects annualExpenses as a number");
+    // if it's an object or undefined, compute annual expenses from it
+    try {
+      annualExpenses = computeAnnualExpenses(annualExpenses || {});
+    } catch (e) {
+      // fallback: coerce whatever was passed to a number
+      annualExpenses = toNumber(annualExpenses);
+    }
   }
   return toNumber(netAnnual) - toNumber(annualExpenses);
 }
@@ -215,6 +224,11 @@ function computeSavingsRate({ netAnnual = 0, annualExpenses = 0 }) {
   return surplus / income; // decimal (e.g. 0.32)
 }
 
+function sumIncomeSources(incomeSources = []) {
+  if (!Array.isArray(incomeSources)) return 0;
+  return incomeSources.reduce((sum, src) => sum + toNumber(src?.amount), 0);
+}
+
 module.exports = {
   toNumber,
   sumExpenses,
@@ -236,6 +250,7 @@ module.exports = {
   estimateFIYear,
   resolveTargetNetWorth,
   computeSavingsRate,
+  sumIncomeSources,
   getConservativeAssumptions,
 };
 

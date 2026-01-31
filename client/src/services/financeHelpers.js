@@ -218,6 +218,10 @@ export function computeSavingsRate(netAnnual, annualExpenses) {
   return (income - expenses) / income;
 }
 
+export function computeAdditionalIncome(incomeSources = []) {
+  return incomeSources.reduce((sum, src) => sum + Number(src.amount || 0), 0);
+}
+
 // This file contains helper functions for financial calculations.
 
 // It includes functions to compute net worth, annual surplus, convert between monthly and annual amounts,

@@ -12,6 +12,7 @@ const {
   computeAnnualSurplus,
   computeAnnualExpenses,
   computeSavingsRate,
+  sumIncomeSources,
   computeNetWorth,
 } = require("../utils/financeHelpers");
 
@@ -39,9 +40,16 @@ router.post("/", auth, async (req, res) => {
       req.body.assets,
       req.body.liabilities
     );
+    // const incomeSourcesTotal = sumIncomeSources(req.body.income?.incomeSources);
+    const additionalIncomeTotal = Array.isArray(req.body.income?.incomeSources)
+      ? sumIncomeSources(req.body.income.incomeSources)
+      : toNumber(req.body.income?.additionalIncome);
+
     const netAnnual = computeNetAnnual(
       req.body.income?.takeHome,
-      req.body.income?.additionalIncome
+      additionalIncomeTotal
+      // incomeSourcesTotal
+      // req.body.income?.additionalIncome
     );
     const annualExpenses = computeAnnualExpenses(req.body.expenses);
     const annualSurplus = computeAnnualSurplus(netAnnual, annualExpenses);
@@ -143,12 +151,21 @@ router.put("/:id", auth, async (req, res) => {
       realisticFIYear: calculation.realisticFIYear,
     };
 
+    // merged.income.additionalIncome = incomeSourcesTotal;
+
     // --- Append historical snapshot ---
     merged.netWorthHistory = merged.netWorthHistory || [];
     const currentNetWorth = computeNetWorth(merged.assets, merged.liabilities);
+    // const incomeSourcesTotal = sumIncomeSources(merged.income?.incomeSources);
+    const additionalIncomeTotal = Array.isArray(merged.income?.incomeSources)
+      ? sumIncomeSources(merged.income.incomeSources)
+      : toNumber(merged.income?.additionalIncome);
+
     const netAnnual = computeNetAnnual(
       merged.income?.takeHome,
-      merged.income?.additionalIncome
+      additionalIncomeTotal
+      // incomeSourcesTotal
+      // merged.income?.additionalIncome
     );
     const annualExpenses = computeAnnualExpenses(merged.expenses);
     const annualSurplus = computeAnnualSurplus(netAnnual, annualExpenses);

@@ -12,6 +12,7 @@ import {
   computeAnnualSurplus,
   monthlyToAnnual,
   computeSavingsRate,
+  computeAdditionalIncome,
   // estimateFIYear,
   // resolveTargetNetWorth,
   // annualToMonthly,
@@ -119,6 +120,10 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
     netWorth: 0,
   });
 
+  const previewAdditionalIncome = React.useMemo(() => {
+    return computeAdditionalIncome(form.income?.incomeSources);
+  }, [form.income?.incomeSources]);
+
   // add expenses input mode state (monthly | annual)
   // const [expensesMode, setExpensesMode] = useState("monthly");
 
@@ -165,6 +170,7 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
     const annualSurplus = computeAnnualSurplus(
       form.income?.netAnnual,
       form.income?.additionalIncome,
+      // previewAdditionalIncome,
       expensesForCalc
     );
     const comprehensive = nw + annualSurplus;
@@ -340,7 +346,8 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
     const totalTax =
       Number(unformatNumber(form.income.totalIncomeTax || "0")) || 0;
     const additional =
-      Number(unformatNumber(form.income.additionalIncome || "0")) || 0;
+      // Number(unformatNumber(form.income.additionalIncome || "0")) || 0;
+      previewAdditionalIncome || 0;
 
     const computedTakeHome = gross - totalTax;
     const computedNet = computedTakeHome + additional;
@@ -358,13 +365,15 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
           ...prev.income,
           takeHome: computedTakeHome,
           netAnnual: computedNet,
+          additionalIncome: additional,
         },
       }));
     }
   }, [
     form.income.grossAnnual,
     form.income.totalIncomeTax,
-    form.income.additionalIncome,
+    // form.income.additionalIncome,
+    previewAdditionalIncome,
     form.income.takeHome,
     form.income.netAnnual,
   ]);
@@ -823,7 +832,7 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
               ⓘ
             </span>
           </label>
-          <input
+          {/* <input
             name="income.additionalIncome"
             // value={form.income.additionalIncome}
             value={formatNumber(form.income.additionalIncome ?? "")}
@@ -833,7 +842,21 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
             // type="number"
             type="text"
             className="w-full px-3 py-2 border rounded"
-          />
+          /> */}
+          <div>
+            <label className="font-medium text-sm text-gray-700 flex items-center">
+              Additional Income (auto-calculated)
+              <InfoPopover label="Additional Income">
+                <p className="text-gray-700 text-sm">
+                  Sum of all income sources below.
+                </p>
+              </InfoPopover>
+            </label>
+
+            <div className="mt-1 p-2 bg-gray-50 border rounded text-sm">
+              ${formatNumber(previewAdditionalIncome)}
+            </div>
+          </div>
           <div>
             <h4 className="font-semibold">Income Sources</h4>
             {Array.isArray(form.income.incomeSources) &&
