@@ -209,6 +209,15 @@ export function getConservativeAssumptions({ annualSurplus, returnRate }) {
   };
 }
 
+export function computeSavingsRate(netAnnual, annualExpenses) {
+  const income = Number(netAnnual) || 0;
+  const expenses = Number(annualExpenses) || 0;
+
+  if (income <= 0) return 0;
+
+  return (income - expenses) / income;
+}
+
 // This file contains helper functions for financial calculations.
 
 // It includes functions to compute net worth, annual surplus, convert between monthly and annual amounts,

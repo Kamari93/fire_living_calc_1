@@ -11,6 +11,7 @@ import {
   computeNetWorth,
   computeAnnualSurplus,
   monthlyToAnnual,
+  computeSavingsRate,
   // estimateFIYear,
   // resolveTargetNetWorth,
   // annualToMonthly,
@@ -486,6 +487,10 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
       },
     });
   };
+
+  const previewSavingsRate = React.useMemo(() => {
+    return computeSavingsRate(form.income?.netAnnual, totals.expenses);
+  }, [form.income?.netAnnual, totals.expenses]);
 
   function cleanFormData(form) {
     // Recursively convert "" to undefined for all fields
@@ -1397,7 +1402,8 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
             </div>
             <span className="font-semibold text-green-900">
               {/* {formatNumber(form.savingsRate * 100)}% */}
-              {formatNumber(Math.round(form.savingsRate * 100))}%
+              {/* {formatNumber(Math.round(previewSavingsRate * 100))}% */}
+              {`${(previewSavingsRate * 100).toFixed(0)}%`}
             </span>
           </div>
           {/* Recommended combined metric with tooltip */}
