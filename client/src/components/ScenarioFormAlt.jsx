@@ -740,8 +740,9 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
             </span>
           </label>
           <select
-            name="filingStatus"
-            value={form.filingStatus}
+            name="income.filingStatus"
+            // value={form.income.filingStatus}
+            value={form.income.filingStatus || ""}
             onChange={handleChange}
             className="w-full px-3 py-2 border rounded"
           >
@@ -763,8 +764,8 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
             </span>
           </label>
           <input
-            name="dependents"
-            value={form.dependents}
+            name="income.dependents"
+            value={form.income?.dependents || 0}
             onChange={handleChange}
             type="number"
             min={0}
