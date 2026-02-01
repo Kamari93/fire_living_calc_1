@@ -51,7 +51,13 @@ router.post("/", auth, async (req, res) => {
         .status(404)
         .json({ message: "One or more scenarios not found" });
     }
-    const snapshots = scenarios.map((s) => s.toObject());
+    // const snapshots = scenarios.map((s) => s.toObject());
+    // ✅ FIX: Map scenarios to snapshots AND add scenarioId
+    const snapshots = scenarios.map((s) => {
+      const snapshotObj = s.toObject();
+      snapshotObj.scenarioId = s._id; // ← ADD THIS LINE
+      return snapshotObj;
+    });
     const comparison = new ScenarioComparison({
       // userId: req.user._id,
       // scenarioIds,

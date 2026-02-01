@@ -1,8 +1,10 @@
 const express = require("express");
 const Scenario = require("../models/Scenario");
 const AIInteraction = require("../models/AIInteraction");
+const ScenarioComparison = require("../models/ScenarioComparison");
 const jwt = require("jsonwebtoken");
 const router = express.Router(); //router for defining routes
+const { buildScenarioSnapshot } = require("../utils/scenarioSnapshot");
 const {
   calculateScenarioOutcome,
 } = require("../services/scenarioCalculationService");
@@ -187,62 +189,37 @@ router.put("/:id", auth, async (req, res) => {
       { new: true }
     );
 
+    const updatedSnapshot = buildScenarioSnapshot(updated);
+
+    // Update snapshots in any comparisons that include this scenario
+    await ScenarioComparison.updateMany(
+      {
+        userId: req.user._id,
+        // scenarioIds: updated._id,
+        "snapshots.scenarioId": updated._id, // Find comparisons with this scenario
+      },
+      {
+        $set: {
+          // "snapshots.$[snap]": buildScenarioSnapshot(updated), // rebuild snapshot
+          "snapshots.$[snap]": updatedSnapshot, // Replace entire snapshot
+          updatedAt: new Date(),
+        },
+      },
+      {
+        arrayFilters: [{ "snap.scenarioId": updated._id }], // only update matching snapshot
+      }
+    );
+    const matchedComparisons = await ScenarioComparison.find({
+      userId: req.user._id,
+      "snapshots.scenarioId": updated._id,
+    });
+    // console.log("📍 Found comparisons to update:", matchedComparisons.length);
+    // console.log(updated._id, typeof updated._id);
     res.json(updated);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
-
-// router.put("/:id", auth, async (req, res) => {
-//   try {
-//     const existing = await Scenario.findOne({
-//       _id: req.params.id,
-//       user: req.user._id,
-//     });
-
-//     if (!existing) {
-//       return res.status(404).json({ message: "Not found" });
-//     }
-
-//     // Merge existing + incoming changes
-//     const merged = {
-//       ...existing.toObject(),
-//       ...req.body,
-//     };
-
-//     const calculation = calculateScenarioOutcome(merged);
-
-//     merged.fireGoal = {
-//       ...merged.fireGoal,
-//       estimatedFIYear: calculation.estimatedFIYear,
-//       realisticFIYear: calculation.realisticFIYear,
-//     };
-
-//     const updated = await Scenario.findOneAndUpdate(
-//       { _id: req.params.id, user: req.user._id },
-//       merged,
-//       { new: true }
-//     );
-
-//     res.json(updated);
-//   } catch (err) {
-//     res.status(400).json({ error: err.message });
-//   }
-// });
-
-// router.put("/:id", auth, async (req, res) => {
-//   try {
-//     const scenario = await Scenario.findOneAndUpdate(
-//       { _id: req.params.id, user: req.user._id },
-//       req.body,
-//       { new: true }
-//     );
-//     if (!scenario) return res.status(404).json({ message: "Not found" });
-//     res.json(scenario);
-//   } catch (err) {
-//     res.status(400).json({ error: err.message });
-//   }
-// });
 
 // Delete a scenario
 router.delete("/:id", auth, async (req, res) => {

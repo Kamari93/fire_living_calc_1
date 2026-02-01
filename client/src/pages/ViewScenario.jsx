@@ -152,12 +152,12 @@ export default function ViewScenario() {
               : "---",
         },
         {
-          label: "Other Income",
+          label: "Additional Income Total",
           // value: `$${scenario.income?.additionalIncome ?? "---"}`,
           value: `$${formatNumber(scenario.income?.additionalIncome) || "---"}`,
         },
         {
-          label: "Income Sources",
+          label: "Additional Income Sources",
           value:
             Array.isArray(scenario.income?.incomeSources) &&
             scenario.income.incomeSources.length > 0 ? (

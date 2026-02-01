@@ -845,7 +845,7 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
           /> */}
           <div>
             <label className="font-medium text-sm text-gray-700 flex items-center">
-              Additional Income (auto-calculated)
+              Additional Income Total (auto-calculated)
               <InfoPopover label="Additional Income">
                 <p className="text-gray-700 text-sm">
                   Sum of all income sources below.
@@ -858,7 +858,7 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
             </div>
           </div>
           <div>
-            <h4 className="font-semibold">Income Sources</h4>
+            <h4 className="font-semibold">Additional Income Sources</h4>
             {Array.isArray(form.income.incomeSources) &&
               form.income.incomeSources.map((src, idx) =>
                 src ? (
@@ -878,7 +878,7 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
                         )
                       }
                       // onBlur={handleBlur}
-                      placeholder="Type (e.g. W2, freelance)"
+                      placeholder="Type (e.g. freelance, rental property, etc.)"
                       className="w-full px-2 py-1 border rounded mb-2 md:mb-0"
                     />
                     <input
