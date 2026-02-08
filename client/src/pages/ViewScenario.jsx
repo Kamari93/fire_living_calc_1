@@ -65,14 +65,14 @@ export default function ViewScenario() {
   const liabilitiesTotal = sumLiabilities(scenario.liabilities || {});
   const netWorth = computeNetWorth(
     scenario.assets || {},
-    scenario.liabilities || {}
+    scenario.liabilities || {},
   );
 
   // derived metrics using finance helpers
   const annualSurplus = computeAnnualSurplusViewCard(
     scenario.income?.netAnnual,
     scenario.income?.additionalIncome,
-    scenario.expenses
+    scenario.expenses,
     // monthlyToAnnual(scenario.expenses || {})
   );
   // const {
@@ -90,7 +90,7 @@ export default function ViewScenario() {
     scenario.income?.netAnnual,
     scenario.income?.additionalIncome,
     scenario.liabilities || {},
-    scenario.expenses || {}
+    scenario.expenses || {},
   );
 
   const comprehensive = computeComprehensivePosition(netWorth, annualSurplus);
@@ -131,8 +131,8 @@ export default function ViewScenario() {
             scenario.income?.totalIncomeTax != null
               ? `$${formatNumber(scenario.income.totalIncomeTax)}`
               : scenario.expenses?.taxes
-              ? "See tax breakdown below or enter total tax"
-              : "---",
+                ? "See tax breakdown below or enter total tax"
+                : "---",
         },
         {
           label: "Take Home",
@@ -168,7 +168,7 @@ export default function ViewScenario() {
                       {/* {src.type}: ${src.amount} */}
                       {src.type}: ${formatNumber(src.amount)}
                     </li>
-                  ) : null
+                  ) : null,
                 )}
               </ul>
             ) : (
@@ -207,8 +207,8 @@ export default function ViewScenario() {
             formatNumber(
               scenario.expenses?.customExpenses.reduce(
                 (total, expense) => total + (expense.amount || 0),
-                0
-              )
+                0,
+              ),
             ) || "---"
           }`,
         },
@@ -224,7 +224,7 @@ export default function ViewScenario() {
                       {/* {exp.label}: ${exp.amount} */}
                       {exp.label}: ${formatNumber(exp.amount)}
                     </li>
-                  ) : null
+                  ) : null,
                 )}
               </ul>
             ) : (
@@ -368,8 +368,8 @@ export default function ViewScenario() {
                   index === step
                     ? "bg-blue-600 text-white border-blue-600"
                     : index < step
-                    ? "bg-blue-100 text-blue-600 border-blue-600"
-                    : "bg-gray-100 text-gray-400 border-gray-300"
+                      ? "bg-blue-100 text-blue-600 border-blue-600"
+                      : "bg-gray-100 text-gray-400 border-gray-300"
                 }`}
               >
                 {index + 1}
@@ -409,7 +409,7 @@ export default function ViewScenario() {
                       ? field.value
                       : field.value}
                   </div>
-                )
+                ),
             )}
           </div>
         </div>
@@ -440,18 +440,30 @@ export default function ViewScenario() {
           Back to Scenarios
         </button> */}
         {/* Exit button */}
-        <button
-          className="mt-6 bg-red-500 text-white px-4 py-2 rounded"
-          onClick={() => {
-            if (fromComparison && comparisonId) {
-              navigate(`/comparison/${comparisonId}`);
-            } else {
-              navigate("/dashboard");
-            }
-          }}
-        >
-          {fromComparison ? "Back to Comparison" : "Back to Dashboard"}
-        </button>
+        <div className="flex justify-between mt-6">
+          <button
+            className="mt-6 bg-red-500 text-white px-4 py-2 rounded"
+            onClick={() => {
+              if (fromComparison && comparisonId) {
+                navigate(`/comparison/${comparisonId}`);
+              } else {
+                navigate("/dashboard");
+              }
+            }}
+          >
+            {fromComparison ? "Back to Comparison" : "Back to Dashboard"}
+          </button>
+          <button
+            className="mt-4 bg-yellow-500 text-white px-4 py-2 rounded"
+            onClick={() => {
+              navigate("/dashboard", {
+                state: { editScenario: scenario },
+              });
+            }}
+          >
+            Edit This Scenario
+          </button>
+        </div>
       </div>
       {/* Summary totals card (new) */}
       <div className="bg-white rounded shadow p-4 my-4">
@@ -465,7 +477,7 @@ export default function ViewScenario() {
               aria-label="Annual Expenses info"
               data-tooltip-id="annualSurplusTip"
               data-tooltip-content={`Total monthly expenses: $${formatNumber(
-                expenseTotal
+                expenseTotal,
               )}/mo.`}
               className="ml-2 text-xs text-blue-500"
               place="right"

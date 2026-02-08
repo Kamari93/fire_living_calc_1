@@ -1,9 +1,9 @@
-import React, { useState, useRef, useContext } from "react"; //useRef is used to access child component methods
+import React, { useState, useRef, useContext, useEffect } from "react"; //useRef is used to access child component methods
 import ScenarioForm from "../components/ScenarioForm";
 import ScenarioFormAlt from "../components/ScenarioFormAlt";
 import ScenarioList from "../components/ScenarioList";
 import ScenarioCharts from "../components/ScenarioCharts";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
 
 export default function ScenarioDashboard() {
@@ -11,6 +11,7 @@ export default function ScenarioDashboard() {
   const [showSuccess, setShowSuccess] = useState(false);
   const listRef = useRef(); // Reference to the ScenarioList component
   const navigate = useNavigate(); // For navigation if needed
+  const location = useLocation(); // To access any state passed via navigation
   const { user } = useContext(AuthContext);
 
   // Called when user clicks "Edit"
@@ -29,6 +30,12 @@ export default function ScenarioDashboard() {
     }
     setTimeout(() => setShowSuccess(false), 2000);
   };
+
+  useEffect(() => {
+    if (location.state?.editScenario) {
+      handleEdit(location.state.editScenario);
+    }
+  }, [location.state]);
 
   return (
     <div className="max-w-4xl w-full mx-auto min-h-screen  py-8 px-4">

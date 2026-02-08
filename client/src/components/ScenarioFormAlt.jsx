@@ -171,7 +171,7 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
       form.income?.netAnnual,
       form.income?.additionalIncome,
       // previewAdditionalIncome,
-      expensesForCalc
+      expensesForCalc,
     );
     const comprehensive = nw + annualSurplus;
 
@@ -230,16 +230,31 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
           additionalIncome: scenario.income?.additionalIncome ?? "",
           incomeSources: scenario.income?.incomeSources ?? [],
         },
-        expenses: scenario.expenses || {
-          rent: "",
-          groceries: "",
-          healthcare: "",
-          childcare: "",
-          transportation: "",
-          utilities: "",
-          discretionary: "",
-          taxes: { federal: "", state: "", local: "" },
-          customExpenses: [],
+        // expenses: scenario.expenses || {
+        //   rent: "",
+        //   groceries: "",
+        //   healthcare: "",
+        //   childcare: "",
+        //   transportation: "",
+        //   utilities: "",
+        //   discretionary: "",
+        //   taxes: { federal: "", state: "", local: "" },
+        //   customExpenses: [],
+        // },
+        expenses: {
+          rent: scenario.expenses?.rent ?? "",
+          groceries: scenario.expenses?.groceries ?? "",
+          healthcare: scenario.expenses?.healthcare ?? "",
+          childcare: scenario.expenses?.childcare ?? "",
+          transportation: scenario.expenses?.transportation ?? "",
+          utilities: scenario.expenses?.utilities ?? "",
+          discretionary: scenario.expenses?.discretionary ?? "",
+          taxes: {
+            federal: scenario.expenses?.taxes?.federal ?? "",
+            state: scenario.expenses?.taxes?.state ?? "",
+            local: scenario.expenses?.taxes?.local ?? "",
+          },
+          customExpenses: scenario.expenses?.customExpenses ?? [],
         },
         assets: scenario.assets || {
           cash: "",
@@ -614,7 +629,7 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
       setStep(1); // <-- reset to first step
     } catch (err) {
       alert(
-        "Error saving scenario: " + (err.response?.data?.error || err.message)
+        "Error saving scenario: " + (err.response?.data?.error || err.message),
       );
       console.error(err);
     }
@@ -874,7 +889,7 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
                           "income.incomeSources",
                           idx,
                           "type",
-                          e.target.value
+                          e.target.value,
                         )
                       }
                       // onBlur={handleBlur}
@@ -889,7 +904,7 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
                           "income.incomeSources",
                           idx,
                           "amount",
-                          e.target.value
+                          e.target.value,
                         )
                       }
                       onBlur={handleBlur}
@@ -899,7 +914,7 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
                       className="w-full px-2 py-1 border rounded"
                     />
                   </div>
-                ) : null
+                ) : null,
               )}
             <button
               type="button"
@@ -1113,7 +1128,7 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
                         "expenses.customExpenses",
                         idx,
                         "label",
-                        e.target.value
+                        e.target.value,
                       )
                     }
                     placeholder="Label"
@@ -1126,7 +1141,7 @@ export default function ScenarioForm({ scenario, onScenarioSaved }) {
                         "expenses.customExpenses",
                         idx,
                         "amount",
-                        e.target.value
+                        e.target.value,
                       )
                     }
                     onBlur={handleBlur}
