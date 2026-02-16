@@ -40,7 +40,7 @@ router.post("/", auth, async (req, res) => {
 
     const currentNetWorth = computeNetWorth(
       req.body.assets,
-      req.body.liabilities
+      req.body.liabilities,
     );
     // const incomeSourcesTotal = sumIncomeSources(req.body.income?.incomeSources);
     const additionalIncomeTotal = Array.isArray(req.body.income?.incomeSources)
@@ -49,7 +49,7 @@ router.post("/", auth, async (req, res) => {
 
     const netAnnual = computeNetAnnual(
       req.body.income?.takeHome,
-      additionalIncomeTotal
+      additionalIncomeTotal,
       // incomeSourcesTotal
       // req.body.income?.additionalIncome
     );
@@ -165,7 +165,7 @@ router.put("/:id", auth, async (req, res) => {
 
     const netAnnual = computeNetAnnual(
       merged.income?.takeHome,
-      additionalIncomeTotal
+      additionalIncomeTotal,
       // incomeSourcesTotal
       // merged.income?.additionalIncome
     );
@@ -186,7 +186,7 @@ router.put("/:id", auth, async (req, res) => {
     const updated = await Scenario.findOneAndUpdate(
       { _id: req.params.id, user: req.user._id },
       merged,
-      { new: true }
+      { new: true },
     );
 
     const updatedSnapshot = buildScenarioSnapshot(updated);
@@ -207,8 +207,27 @@ router.put("/:id", auth, async (req, res) => {
       },
       {
         arrayFilters: [{ "snap.scenarioId": updated._id }], // only update matching snapshot
-      }
+      },
     );
+    // Find comparisons affected by this scenario update
+    const affectedComparisons = await ScenarioComparison.find(
+      {
+        userId: req.user._id,
+        "snapshots.scenarioId": updated._id,
+      },
+      { _id: 1 },
+    );
+
+    const comparisonIds = affectedComparisons.map((c) => c._id);
+
+    // Delete stale AI insights for those comparisons
+    if (comparisonIds.length > 0) {
+      await AIInteraction.deleteMany({
+        comparisonId: { $in: comparisonIds },
+        userId: req.user._id,
+      });
+    }
+
     const matchedComparisons = await ScenarioComparison.find({
       userId: req.user._id,
       "snapshots.scenarioId": updated._id,
